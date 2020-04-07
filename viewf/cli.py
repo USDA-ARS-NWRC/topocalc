@@ -1,5 +1,6 @@
 """Console script for viewf."""
 import sys
+
 import click
 
 

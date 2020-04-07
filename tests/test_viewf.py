@@ -4,10 +4,10 @@
 
 
 import unittest
+
 from click.testing import CliRunner
 
-from viewf import viewf
-from viewf import cli
+from viewf import cli, viewf
 
 
 class TestViewf(unittest.TestCase):
