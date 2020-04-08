@@ -5,9 +5,8 @@ import sys
 from subprocess import check_output
 
 import numpy
-from setuptools import Extension, find_packages, setup
-
 from Cython.Distutils import build_ext
+from setuptools import Extension, find_packages, setup
 
 with open('README.md') as readme_file:
     readme = readme_file.read()

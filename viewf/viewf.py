@@ -23,6 +23,10 @@ def viewf(dem, spacing, nangles=16, slope=None, aspect=None):
     replication of the IPW command `viewf` minus rounding errors
     from type and linear quantization.
 
+    IPW horizon has a more generic horizon function that takes
+    angles and does the calcs
+    https://github.com/USDA-ARS-NWRC/ipw/blob/master/src/bin/topocalc/horizon/horizon.sh
+
     Args:
         spacing:
         dem:

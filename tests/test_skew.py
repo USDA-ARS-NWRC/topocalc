@@ -1,6 +1,7 @@
 import unittest
-from spatialnc import ipw
+
 import numpy as np
+from spatialnc import ipw
 
 from viewf.skew import skew
 

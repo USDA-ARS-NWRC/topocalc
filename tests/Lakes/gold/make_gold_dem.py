@@ -1,14 +1,17 @@
+import netCDF4 as nc
+import numpy as np
 from spatialnc import ipw
 from spatialnc.topo import get_topo_stats
-import netCDF4 as nc
 
 # convert the netcdf DEM to IPW file
+# Convert the dem to integers to limit the problem of
+# double percision error for the input
 
 # Load the netcdf dem and get all the geo coords for IPW
 topo_path = './tests/Lakes/topo.nc'
 
 d = nc.Dataset(topo_path)
-dem = d.variables['dem'][:]
+dem = np.round(d.variables['dem'][:])
 d.close()
 
 ts = get_topo_stats(topo_path)

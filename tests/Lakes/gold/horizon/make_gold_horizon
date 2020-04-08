@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# A script to create the gold files for the horizon tests
+# which requires the latest IPW version v2.4.1. However,
+# the horizon function called here is custom in that the original
+# only outputs 8 bit images and this one outputs 16 bit images
+#
+# Run as:
+#     $ ./tests/Lakes/gold/horizon/make_gold_horizon
+
+horizon=$IPW/src/bin/topocalc/horizon/horizon
+
+read -r -p "Recreating gold horizon standard, are you sure? [y/N] " response
+if [[ "$response" = "yes" || "$response" = "y" ]]
+then
+    echo "Updating horizon gold files"
+    echo "Removing old gold files"
+    rm tests/Lakes/gold/horizon/*.ipw
+    
+    echo "Running IPW horizon"
+    for i in {0..360..5}
+        do
+            echo "horizon for $i degrees"
+            $horizon -a $i tests/Lakes/gold/gold_dem.ipw > tests/Lakes/gold/horizon/horizon_$i.ipw
+        done
+
+else
+    echo "Lakes gold files not updated"
+fi
