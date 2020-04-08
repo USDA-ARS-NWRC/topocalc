@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# A script to create the gold files for the skew tests
+# which requires the latest IPW version v2.4.1
+#
+# Run as:
+#     $ ./tests/Lakes/gold/skew/make_gold_skew
+
+
+read -r -p "Recreating gold skew standard, are you sure? [y/N] " response
+if [[ "$response" = "yes" || "$response" = "y" ]]
+then
+    echo "Updating skew gold files"
+    echo "Removing old gold files"
+    rm tests/Lakes/gold/skew/*.ipw
+    
+    echo "Running IPW skew"
+    for i in {-45..45..5}
+        do
+            echo "skew for $i degrees"
+            skew -a $i tests/Lakes/gold/gold_dem.ipw > tests/Lakes/gold/skew/skew_$i.ipw
+        done
+
+else
+    echo "Lakes gold files not updated"
+fi
