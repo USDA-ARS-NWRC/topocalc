@@ -24,6 +24,26 @@ def skew_transpose(dem, spacing, angle):
     return t, spacing
 
 
+def transpose_skew(dem, spacing, angle):
+    """Transpose, skew then transpose a dem for the
+    given angle. Also calculate the new spacing
+
+    Arguments:
+        dem {array} -- numpy array of dem elevations
+        spacing {float} -- grid spacing
+        angle {float} -- skew angle
+
+    Returns:
+        t -- skew and transpose array
+        spacing -- new spacing adjusted for angle
+    """
+
+    t = skew(dem.transpose(), angle, fill_min=True).transpose()
+    spacing = adjust_spacing(spacing, np.abs(angle))
+
+    return t, spacing
+
+
 def horizon(azimuth, dem, spacing):
     """Horizon in one
 
@@ -63,6 +83,7 @@ def horizon(azimuth, dem, spacing):
         hcos = hcos.transpose()
 
     elif azimuth >= -45 and azimuth <= 45:
+        # South west through south east
         t, spacing = skew_transpose(dem, spacing, azimuth)
         h = hor2d_c(t, spacing, fwd=True)
         hcos = skew(h.transpose(), azimuth, fwd=False)
@@ -73,6 +94,33 @@ def horizon(azimuth, dem, spacing):
         t, spacing = skew_transpose(dem, spacing, a)
         h = hor2d_c(t, spacing, fwd=False)
         hcos = skew(h.transpose(), a, fwd=False)
+
+    elif azimuth >= 135 and azimuth < 180:
+        # North East
+        a = azimuth - 180
+        t, spacing = skew_transpose(dem, spacing, a)
+        h = hor2d_c(t, spacing, fwd=False)
+        hcos = skew(h.transpose(), a, fwd=False)
+
+    elif azimuth > 45 and azimuth < 135:
+        # South east through north east
+        a = 90 - azimuth
+        t, spacing = transpose_skew(dem, spacing, a)
+        h = hor2d_c(t, spacing, fwd=True)
+        hcos = skew(h.transpose(), a, fwd=False).transpose()
+
+    elif azimuth < -45 and azimuth > -135:
+        # South west through north west
+        a = -90 - azimuth
+        t, spacing = transpose_skew(dem, spacing, a)
+        h = hor2d_c(t, spacing, fwd=False)
+        hcos = skew(h.transpose(), a, fwd=False).transpose()
+
+    else:
+        ValueError('azimuth not valid')
+
+    # sanity check
+    assert hcos.shape == dem.shape
 
     return hcos
 

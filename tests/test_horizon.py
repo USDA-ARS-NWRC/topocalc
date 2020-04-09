@@ -53,11 +53,25 @@ class TestHorizon(unittest.TestCase):
         gold = ipw.IPW(self.gold_file.format(azimuth))
         gold_data = gold.bands[0].data
 
-        np.testing.assert_allclose(h_float, gold_data, rtol=1e-6, atol=1e-4)
+        return gold_data, h_float
+
+    def test_horizon_cardinal(self):
+        """Test horizon for cardinal directions"""
+
+        # cardinal directions have much less erro
+        for angle in [-180, -90, 0, 90, 180]:
+            print('horizon anlge {}'.format(angle))
+            gold_data, h_float = self.run_horizon(angle)
+
+            np.testing.assert_allclose(
+                h_float, gold_data, rtol=1e-7, atol=1e-4)
 
     def test_horizon(self):
         """Test horizon for all degrees"""
 
         for angle in range(-180, 180, 5):
             print('horizon anlge {}'.format(angle))
-            self.run_horizon(angle)
+            gold_data, h_float = self.run_horizon(angle)
+
+            np.testing.assert_allclose(
+                h_float, gold_data, rtol=1e-6, atol=1e-3)
