@@ -72,6 +72,10 @@ void hor2d(
     }
 }
 
+/*
+* hor1f from hor1f.c in IPW
+* https://github.com/USDA-ARS-NWRC/ipw/blob/master/src/bin/topocalc/horizon/hor1d/hor1f.c
+*/
 int hor1f(
     int n,     /* length of vectors b and h */
     double *z, /* elevation function */
@@ -150,6 +154,10 @@ int hor1f(
     return (0);
 }
 
+/*
+* hor1b from hor1b.c in IPW
+* https://github.com/USDA-ARS-NWRC/ipw/blob/master/src/bin/topocalc/horizon/hor1d/hor1b.c
+*/
 int hor1b(
     int n,     /* length of vectors b and h */
     double *z, /* elevation function */
@@ -236,6 +244,7 @@ int hor1b(
 **		sin G = z / sqrt( z^2 + dis^2);
 **
 **	This result is the same as cos H, where H measured from zenith.
+**  https://github.com/USDA-ARS-NWRC/ipw/blob/master/src/bin/topocalc/horizon/hor1d/horval.c
 */
 
 void horval(

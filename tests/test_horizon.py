@@ -16,9 +16,8 @@ class TestHorizon(unittest.TestCase):
         d = ipw.IPW(infile)
 
         # C code for hor1d is expecting double
-        # round here as the LQ headers have added some small
-        # values in the linearization of the image
-        cls.gold_dem = np.round(np.double(d.bands[0].data))
+        # the LQ headers have added some small values in the linearization of the image
+        cls.gold_dem = np.double(d.bands[0].data)
         cls.spacing = d.bands[0].dline
 
         # Horizon gold files
@@ -27,8 +26,8 @@ class TestHorizon(unittest.TestCase):
         # to make a fair comparison, first convert the hcos to
         # integers then back using the 16 bit LQ
         # with horizon the float min/max are constant from 0-1
-        cls.float_min = 0.0
-        cls.float_max = 1.0
+        cls.float_min = 1.0
+        cls.float_max = 0.0
         cls.int_min = 0
         cls.int_max = 2**16-1
 
@@ -54,9 +53,11 @@ class TestHorizon(unittest.TestCase):
         gold = ipw.IPW(self.gold_file.format(azimuth))
         gold_data = gold.bands[0].data
 
-        np.testing.assert_almost_equal(gold_data, h_float, decimal=4)
+        np.testing.assert_allclose(h_float, gold_data, rtol=1e-6, atol=1e-4)
 
-    def test_horizon_90(self):
-        """Test horizon at 90 degrees"""
+    def test_horizon(self):
+        """Test horizon for all degrees"""
 
-        self.run_horizon(90)
+        for angle in range(-180, 180, 5):
+            print('horizon anlge {}'.format(angle))
+            self.run_horizon(angle)

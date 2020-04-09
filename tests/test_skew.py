@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from spatialnc import ipw
 
-from viewf.skew import skew
+from viewf.skew import skew, adjust_spacing
 
 
 class TestSkew(unittest.TestCase):
@@ -37,3 +37,17 @@ class TestSkew(unittest.TestCase):
         """Test error with angle"""
         self.assertRaises(ValueError, skew, np.ones(10), -100)
         self.assertRaises(ValueError, skew, np.ones(10), 100)
+
+    def test_skew_spacing_angle(self):
+        """Test the output of the skew spacing angle"""
+
+        # outputs created on Ubuntu 18.04
+        s = [
+            50.0, 50.19099187716737, 50.77133059428725,
+            51.76380902050415, 53.2088886237956,
+            55.168895948124586, 57.735026918962575,
+            61.0387294380728, 65.27036446661393]
+
+        for i, a in enumerate(range(0, 45, 5)):
+            t = adjust_spacing(50, a)
+            self.assertAlmostEqual(t, s[i])

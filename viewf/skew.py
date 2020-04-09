@@ -1,6 +1,20 @@
 import numpy as np
 
 
+def adjust_spacing(spacing, skew_angle):
+    """Adjust the grid spacing if a skew angle is present
+
+    Arguments:
+        spacing {float} -- grid spacing
+        skew_angle {float} -- angle to adjust the spacing for [degrees]
+    """
+
+    if skew_angle > 45 or skew_angle < 0:
+        raise ValueError('skew angle must be between 0 and 45 degrees')
+
+    return spacing / np.cos(skew_angle * np.arctan(1.) / 45)
+
+
 def skew(arr, angle, fwd=True, fill_min=True):
     """
     Skew the origin of successive lines by a specified angle
@@ -22,7 +36,8 @@ def skew(arr, angle, fwd=True, fill_min=True):
         arr: array to skew
         angle: angle between -45 and 45 to skew by
         fwd: add skew to image if True, unskew image if False
-        fill_min: While IPW skew says it fills with zeros, the output image isn't
+        fill_min: While IPW skew says it fills with zeros, the output
+            image is filled with the minimum value
 
     Returns:
         skewed array

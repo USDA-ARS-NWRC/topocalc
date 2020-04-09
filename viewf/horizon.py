@@ -1,6 +1,27 @@
 import numpy as np
 
 from viewf.core_c import topo_core
+from viewf.skew import skew, adjust_spacing
+
+
+def skew_transpose(dem, spacing, angle):
+    """Skew and transpose the dem for the given angle.
+    Also calculate the new spacing given the skew.
+
+    Arguments:
+        dem {array} -- numpy array of dem elevations
+        spacing {float} -- grid spacing
+        angle {float} -- skew angle
+
+    Returns:
+        t -- skew and transpose array
+        spacing -- new spacing adjusted for angle
+    """
+
+    spacing = adjust_spacing(spacing, np.abs(angle))
+    t = skew(dem, angle, fill_min=True).transpose()
+
+    return t, spacing
 
 
 def horizon(azimuth, dem, spacing):
@@ -20,8 +41,38 @@ def horizon(azimuth, dem, spacing):
     if dem.ndim != 2:
         raise ValueError('viewf input of dem is not a 2D array')
 
+    if azimuth > 180 or azimuth < -180:
+        raise ValueError('azimuth must be between -180 and 180 degrees')
+
     if azimuth == 90:
+        # East
         hcos = hor2d_c(dem, spacing, fwd=True)
+
+    elif azimuth == -90:
+        # West
+        hcos = hor2d_c(dem, spacing, fwd=False)
+
+    elif azimuth == 0:
+        # South
+        hcos = hor2d_c(dem.transpose(), spacing, fwd=True)
+        hcos = hcos.transpose()
+
+    elif np.abs(azimuth) == 180:
+        # South
+        hcos = hor2d_c(dem.transpose(), spacing, fwd=False)
+        hcos = hcos.transpose()
+
+    elif azimuth >= -45 and azimuth <= 45:
+        t, spacing = skew_transpose(dem, spacing, azimuth)
+        h = hor2d_c(t, spacing, fwd=True)
+        hcos = skew(h.transpose(), azimuth, fwd=False)
+
+    elif azimuth <= -135 and azimuth > -180:
+        # North west
+        a = azimuth + 180
+        t, spacing = skew_transpose(dem, spacing, a)
+        h = hor2d_c(t, spacing, fwd=False)
+        hcos = skew(h.transpose(), a, fwd=False)
 
     return hcos
 

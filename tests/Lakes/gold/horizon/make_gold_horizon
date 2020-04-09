@@ -18,7 +18,7 @@ then
     rm tests/Lakes/gold/horizon/*.ipw
     
     echo "Running IPW horizon"
-    for i in {0..360..5}
+    for i in {-180..180..5}
         do
             echo "horizon for $i degrees"
             $horizon -a $i tests/Lakes/gold/gold_dem.ipw > tests/Lakes/gold/horizon/horizon_$i.ipw

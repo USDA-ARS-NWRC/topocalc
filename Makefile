@@ -86,3 +86,9 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+jl: ## jupyter lab for analysis
+	jupyter lab --no-browser --port=5678 --ip=0.0.0.0 --allow-root
+
+gold_skew: ## gold skew files
+	./tests/Lakes/gold/skew/make_gold_skew
