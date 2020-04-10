@@ -91,4 +91,10 @@ jl: ## jupyter lab for analysis
 	jupyter lab --no-browser --port=5678 --ip=0.0.0.0 --allow-root
 
 gold_skew: ## gold skew files
-	./tests/Lakes/gold/skew/make_gold_skew
+	./tests/Lakes/gold_ipw/skew/make_gold_skew
+
+gold_horizon: ## gold horizon files
+	./tests/Lakes/gold_ipw/horizon/make_gold_horizon
+
+gold_viewf: ## gold viewf files
+	./tests/Lakes/gold_ipw/viewf/make_gold_viewf

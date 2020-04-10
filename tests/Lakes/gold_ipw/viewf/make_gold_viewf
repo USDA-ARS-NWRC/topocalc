@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# A script to create the gold files for the viewf tests
+# which requires the latest IPW version v2.4.1
+#
+# Run as:
+#     $ ./tests/Lakes/gold_ipw/viewf/make_gold_viewf
+
+
+read -r -p "Recreating gold viewf standard, are you sure? [y/N] " response
+if [[ "$response" = "yes" || "$response" = "y" ]]
+then
+    echo "Updating viewf gold files"
+    echo "Removing old gold files"
+    rm tests/Lakes/gold_ipw/viewf/*.ipw
+    
+    echo "Running IPW viewf 16 angles"
+    $IPW/bin/viewf tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw
+    # prhdr tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw
+
+    echo "Running IPW viewf 32 angles"
+    # $IPW/bin/viewf -x tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/viewf/viewf_8bit_32ang.ipw
+
+else
+    echo "Lakes gold files not updated"
+fi

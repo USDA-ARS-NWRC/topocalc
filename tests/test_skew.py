@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from spatialnc import ipw
 
-from viewf.skew import skew, adjust_spacing
+from viewf.skew import adjust_spacing, skew
 
 
 class TestSkew(unittest.TestCase):
@@ -15,14 +15,15 @@ class TestSkew(unittest.TestCase):
         # comparing the arrays at the end and it will
         # ensure that the bit resolution is kept
 
-        infile = 'tests/Lakes/gold/gold_dem.ipw'
+        infile = 'tests/Lakes/gold_ipw/gold_dem.ipw'
         d = ipw.IPW(infile)
         gold_dem = d.bands[0].data
 
         for angle in range(-45, 45, 5):
 
             # Get the IPW gold skew values
-            gold = ipw.IPW('./tests/Lakes/gold/skew/skew_{}.ipw'.format(angle))
+            gold = ipw.IPW(
+                './tests/Lakes/gold_ipw/skew/skew_{}.ipw'.format(angle))
             gold_data = gold.bands[0].data
 
             # skew the initial array

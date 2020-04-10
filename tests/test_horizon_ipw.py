@@ -30,7 +30,7 @@ class TestHorizonIPW(unittest.TestCase):
     def setUpClass(cls):
 
         # input DEM
-        infile = 'tests/Lakes/gold/gold_dem.ipw'
+        infile = 'tests/Lakes/gold_ipw/gold_dem.ipw'
         d = ipw.IPW(infile)
 
         # C code for hor1d is expecting double
@@ -39,7 +39,7 @@ class TestHorizonIPW(unittest.TestCase):
         cls.spacing = d.bands[0].dline
 
         # Horizon gold files
-        cls.gold_file = 'tests/Lakes/gold/horizon/horizon_{}.ipw'
+        cls.gold_file = 'tests/Lakes/gold_ipw/horizon/horizon_{}.ipw'
 
         # to make a fair comparison, first convert the hcos to
         # integers then back using the 16 bit LQ

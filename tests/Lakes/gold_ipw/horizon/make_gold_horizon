@@ -6,7 +6,7 @@
 # only outputs 8 bit images and this one outputs 16 bit images
 #
 # Run as:
-#     $ ./tests/Lakes/gold/horizon/make_gold_horizon
+#     $ ./tests/Lakes/gold_ipw/horizon/make_gold_horizon
 
 horizon=$IPW/src/bin/topocalc/horizon/horizon
 
@@ -15,13 +15,13 @@ if [[ "$response" = "yes" || "$response" = "y" ]]
 then
     echo "Updating horizon gold files"
     echo "Removing old gold files"
-    rm tests/Lakes/gold/horizon/*.ipw
+    rm tests/Lakes/gold_ipw/horizon/*.ipw
     
     echo "Running IPW horizon"
     for i in {-180..180..5}
         do
             echo "horizon for $i degrees"
-            $horizon -a $i tests/Lakes/gold/gold_dem.ipw > tests/Lakes/gold/horizon/horizon_$i.ipw
+            $horizon -a $i tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/horizon/horizon_$i.ipw
         done
 
 else

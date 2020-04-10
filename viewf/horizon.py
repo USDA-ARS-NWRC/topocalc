@@ -1,7 +1,7 @@
 import numpy as np
 
 from viewf.core_c import topo_core
-from viewf.skew import skew, adjust_spacing
+from viewf.skew import adjust_spacing, skew
 
 
 def skew_transpose(dem, spacing, angle):
@@ -45,9 +45,14 @@ def transpose_skew(dem, spacing, angle):
 
 
 def horizon(azimuth, dem, spacing):
-    """Horizon in one
+    """Calculate horizon angles for one direction. Horizon angles
+    are based on Dozier and Frew 1990 and are adapted from the
+    IPW C code.
 
-    TODO expand this description
+    The coordinate system for the azimuth is 0 degrees is South,
+    with positive angles through East and negative values
+    through West. Azimuth values must be on the -180 -> 0 -> 180
+    range. 
 
     Arguments:
         azimuth {float} -- find horizon's along this direction
