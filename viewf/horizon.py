@@ -151,9 +151,6 @@ def hor2d_c(z, spacing, fwd=True):
 
     spacing = np.double(spacing)
 
-    # if not fwd:
-    #     z = np.ascontiguousarray(np.fliplr(z))
-    # else:
     z = np.ascontiguousarray(z)
 
     h = np.zeros_like(z)
