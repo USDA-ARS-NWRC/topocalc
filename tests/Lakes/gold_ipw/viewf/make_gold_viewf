@@ -16,10 +16,9 @@ then
     
     echo "Running IPW viewf 16 angles"
     $IPW/bin/viewf tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw
-    # prhdr tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw
 
     echo "Running IPW viewf 32 angles"
-    # $IPW/bin/viewf -x tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/viewf/viewf_8bit_32ang.ipw
+    $IPW/bin/viewf -x tests/Lakes/gold_ipw/gold_dem.ipw > tests/Lakes/gold_ipw/viewf/viewf_8bit_32ang.ipw
 
 else
     echo "Lakes gold files not updated"

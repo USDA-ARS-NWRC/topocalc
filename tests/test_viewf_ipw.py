@@ -28,10 +28,10 @@ class TestViewfIPW(unittest.TestCase):
         cls.gold_aspect = d.bands[1].data   # radians
 
         # Viewf gold files
-        cls.gold_file = 'tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw'
-        d = ipw.IPW(cls.gold_file)
-        cls.gold_svf_data = d.bands[0].data
-        cls.gold_tcf_data = d.bands[1].data
+        # cls.gold_file = 'tests/Lakes/gold_ipw/viewf/viewf_8bit_16ang.ipw'
+        # d = ipw.IPW(cls.gold_file)
+        # cls.gold_svf_data = d.bands[0].data
+        # cls.gold_tcf_data = d.bands[1].data
 
         # to make a fair comparison, first convert the viewf to
         # integers then back using the 8 bit LQ

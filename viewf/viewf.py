@@ -3,14 +3,24 @@ import collections
 import numpy as np
 
 from viewf.horizon import horizon
-
-# import matplotlib.pyplot as plt
-
-
-def d2r(a): return a * np.pi / 180
+from viewf.gradient import gradient_d8
 
 
-def viewf(dem, spacing, nangles=16, sin_slope=None, aspect=None):
+def d2r(a):
+    """Angle to radians
+
+    Arguments:
+        a {float} -- angle in degrees
+
+    Returns:
+        v {float} -- angle in radians
+    """
+    v = a * np.pi / 180
+    v = round(v, 6)  # just for testing at the moment
+    return v
+
+
+def viewf(dem, spacing, nangles=72, sin_slope=None, aspect=None):
     """
     Calculate the sky view factor of a dem
 
@@ -24,11 +34,14 @@ def viewf(dem, spacing, nangles=16, sin_slope=None, aspect=None):
     from type and linear quantization.
 
     Args:
-        spacing:
-        dem:
-        nangles:
-        sin_slope: sin(slope) with range from 0 to 1
-        aspect: Aspect as radians from south (aspect 0 is toward
+        dem: numpy array for the DEM
+        spacing: grid spacing of the DEM
+        nangles: number of angles to estimate the horizon, defaults
+                to 72 angles
+        sin_slope: optional, will calculate if not provided
+                    sin(slope) with range from 0 to 1
+        aspect: optional, will calculate if not provided
+                Aspect as radians from south (aspect 0 is toward
                 the south) with range from -pi to pi, with negative
                 values to the west and positive values to the east.
 
@@ -41,11 +54,12 @@ def viewf(dem, spacing, nangles=16, sin_slope=None, aspect=None):
     if dem.ndim != 2:
         raise ValueError('viewf input of dem is not a 2D array')
 
-    if nangles != 16 and nangles != 32:
-        raise ValueError('viewf number of angles can be 16 or 32')
+    if nangles < 16:
+        raise ValueError('viewf number of angles should be 16 or greater')
 
-    if np.max(sin_slope) > 1:
-        raise ValueError('slope must be sin(slope) with range from 0 to 1')
+    if sin_slope is not None:
+        if np.max(sin_slope) > 1:
+            raise ValueError('slope must be sin(slope) with range from 0 to 1')
 
     Horizon = collections.namedtuple('Horizon', ['azimuth', 'hcos'])
 
@@ -53,15 +67,16 @@ def viewf(dem, spacing, nangles=16, sin_slope=None, aspect=None):
     angles = np.linspace(-180, 180, num=nangles, endpoint=False)
 
     hcos = {}
-    angles = [90]
     for angle in angles:
         h = horizon(angle, dem, spacing)
         hcos[angle] = Horizon(d2r(angle), h)
 
     # calculate the gradient if not provided
-    # Fill in after PR #125 as it'll be much simpler
+    # The slope is returned as radians so convert to sin(S)
     if sin_slope is None:
-        pass
+        slope, aspect = gradient_d8(
+            dem, dx=spacing, dy=spacing, aspect_rad=True)
+        sin_slope = np.sin(slope)
 
     svf, tcf = viewcalc(sin_slope, aspect, hcos)
 
@@ -73,6 +88,13 @@ def viewcalc(sin_slope, aspect, hcos):
     Given the slope, aspect and dictionary of horizon
     angles, calculate the cooresponding sky view and terrain
     configuration factors.
+
+    Calculate the sky view factor using equation 7b from Dozier and Frew 1990
+
+    .. math::
+        V_d \approx \frac{1}{2\pi} \int_{0}^{2\pi}\left [ cos(S) sin^2{H_\phi} 
+        + sin(S)cos(\phi-A) \times \left ( H_\phi - sin(H_\phi) cos(H_\phi)
+        \right )\right ] d\phi
 
     terrain configuration factor (tvf) is defined as:
     (1 + cos(slope))/2 - sky view factor
@@ -96,21 +118,36 @@ def viewcalc(sin_slope, aspect, hcos):
     if np.abs(np.max(aspect)) > np.pi:
         raise ValueError('viewcalc: aspect should range from +/- PI')
 
-    # Trig tables for the constanst values that don't change
-    cos_slope, sin_squared, h_mult, cos_aspect = trigtbl(
-        sin_slope, aspect, hcos)
-
     # perform the integral
+    cos_slope = np.sqrt((1 - sin_slope) * (1 + sin_slope))
     svf = np.zeros_like(sin_slope)
-    for key in hcos.keys():
+    for key, h in hcos.items():
 
-        intgrnd = cos_slope * sin_squared[key] + \
-            sin_slope * cos_aspect[key] * h_mult[key]
+        # sin^2(H)
+        sin_squared = (1 - h.hcos) * (1 + h.hcos)
 
-        svf = svf + intgrnd
+        # H - sin(H)cos(H)
+        h_mult = np.arccos(h.hcos) - np.sqrt(sin_squared) * h.hcos
 
-        # ind = intgrnd > 0
-        # svf[ind] = svf[ind] + intgrnd[ind]
+        # cosines of difference between horizon aspect and slope aspect
+        cos_aspect = np.cos(h.azimuth - aspect)
+
+        # integral in equation 7b
+        intgrnd = cos_slope * sin_squared + \
+            sin_slope * cos_aspect * h_mult
+
+        # intgrnd = cos_slope * sin_squared[key] + \
+        #     sin_slope * cos_aspect[key] * h_mult[key]
+
+        # This equation will create basically noise, but add the cos_aspect
+        # and that seems to be what introduces the error
+        # intgrnd = cos_aspect
+        # svf = svf + intgrnd
+
+        ind = intgrnd > 0
+        svf[ind] = svf[ind] + intgrnd[ind]
+
+        # svf = svf + hcos[key].azimuth
 
     svf = svf / len(hcos)
 
@@ -119,39 +156,34 @@ def viewcalc(sin_slope, aspect, hcos):
     return svf, tcf
 
 
-def trigtbl(sin_slope, aspect, hcos):
-    """
-    Calculate the trigometic relationship of the sky view factor using
-    equation 7b from Dozier and Frew 1990
+# def trigtbl(sin_slope, aspect, hcos):
+#     """
 
-    .. math::
-        V_d \approx \frac{1}{2\pi} \int_{0}^{2\pi}\left [ cos(S) sin^2{H_\phi} + sin(S)cos(\phi-A)
-        \times \left ( H_\phi - sin(H_\phi) cos(H_\phi) \right )\right ] d\phi
 
-    Args:
-        slope: sin(slope) with range from 0 to 1
-        aspect: Aspect as radians from south (aspect 0 is toward
-                the south) with range from -pi to pi, with negative
-                values to the west and positive values to the east.
-        hcos: cosines of angles to horizon
-    """
+#     Args:
+#         slope: sin(slope) with range from 0 to 1
+#         aspect: Aspect as radians from south (aspect 0 is toward
+#                 the south) with range from -pi to pi, with negative
+#                 values to the west and positive values to the east.
+#         hcos: cosines of angles to horizon
+#     """
 
-    # cosine of slopes, sin_slope is provided as sin(slope)
-    cos_slope = np.sqrt((1 - sin_slope) * (1 + sin_slope))
+#     # cosine of slopes, sin_slope is provided as sin(slope)
+#     cos_slope = np.sqrt((1 - sin_slope) * (1 + sin_slope))
 
-    # sines and values of horizon angles from zenith
-    sin_squared = {key: None for key in hcos.keys()}
-    h_mult = {key: None for key in hcos.keys()}
-    cos_aspect = {key: None for key in hcos.keys()}
-    for key, h in hcos.items():
-        # sin squared of horizon sin2H
-        sin_squared[key] = (1 - h.hcos) * (1 + h.hcos)
+#     # sines and values of horizon angles from zenith
+#     sin_squared = {key: None for key in hcos.keys()}
+#     h_mult = {key: None for key in hcos.keys()}
+#     cos_aspect = {key: None for key in hcos.keys()}
+#     for key, h in hcos.items():
+#         # sin squared of horizon sin2H
+#         sin_squared[key] = (1 - h.hcos) * (1 + h.hcos)
 
-        # H - sin(H)cos(H)
-        h_mult[key] = np.arccos(h.hcos) - np.sqrt(sin_squared[key]) * h.hcos
+#         # H - sin(H)cos(H)
+#         h_mult[key] = np.arccos(h.hcos) - np.sqrt(sin_squared[key]) * h.hcos
 
-        # cosines of difference between horizon aspect and slope aspect
-        # cos(phi - aspect)
-        cos_aspect[key] = np.cos(h.azimuth - aspect)
+#         # cosines of difference between horizon aspect and slope aspect
+#         cos_aspect[key] = np.cos(h.azimuth - aspect)
+#         # cos_aspect[key] = np.cos(aspect)
 
-    return cos_slope, sin_squared, h_mult, cos_aspect
+#     return cos_slope, sin_squared, h_mult, cos_aspect

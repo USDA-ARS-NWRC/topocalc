@@ -3,31 +3,20 @@
 """Tests for `viewf` package."""
 
 
-# import unittest
+import unittest
 
-# from click.testing import CliRunner
+import numpy as np
 
-# from viewf import cli, viewf
+from viewf.viewf import viewf
 
 
-# class TestViewf(unittest.TestCase):
-#     """Tests for `viewf` package."""
+class TestViewf(unittest.TestCase):
+    """Tests for `viewf` package."""
 
-#     def setUp(self):
-#         """Set up test fixtures, if any."""
+    def test_theory_edge(self):
+        """Test with theortical edge dem"""
 
-#     def tearDown(self):
-#         """Tear down test fixtures, if any."""
+        dem = np.ones((50, 50))
+        dem[:, :25] = 10000
 
-#     def test_000_something(self):
-#         """Test something."""
-
-#     def test_command_line_interface(self):
-#         """Test the CLI."""
-#         runner = CliRunner()
-#         result = runner.invoke(cli.main)
-#         assert result.exit_code == 0
-#         assert 'viewf.cli.main' in result.output
-#         help_result = runner.invoke(cli.main, ['--help'])
-#         assert help_result.exit_code == 0
-#         assert '--help  Show this message and exit.' in help_result.output
+        svf, tvf = viewf(dem, spacing=10)

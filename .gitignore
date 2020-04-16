@@ -104,3 +104,6 @@ ENV/
 # IDE settings
 .vscode/
 .devcontainer
+
+# Files
+notebooks/*.ipw
