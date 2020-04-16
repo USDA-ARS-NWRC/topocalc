@@ -52,7 +52,7 @@ def horizon(azimuth, dem, spacing):
     The coordinate system for the azimuth is 0 degrees is South,
     with positive angles through East and negative values
     through West. Azimuth values must be on the -180 -> 0 -> 180
-    range. 
+    range.
 
     Arguments:
         azimuth {float} -- find horizon's along this direction
@@ -132,7 +132,7 @@ def horizon(azimuth, dem, spacing):
 
 def hor2d_c(z, spacing, fwd=True):
     """
-    Calculate values of cosines of angles to horizons in 2 dimension, 
+    Calculate values of cosines of angles to horizons in 2 dimension,
     measured from zenith, from elevation difference and distance.  Let
     G be the horizon angle from horizontal and note that:
 

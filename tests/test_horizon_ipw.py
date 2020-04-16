@@ -34,7 +34,8 @@ class TestHorizonIPW(unittest.TestCase):
         d = ipw.IPW(infile)
 
         # C code for hor1d is expecting double
-        # the LQ headers have added some small values in the linearization of the image
+        # the LQ headers have added some small values in the
+        # linearization of the image
         cls.gold_dem = np.double(d.bands[0].data)
         cls.spacing = d.bands[0].dline
 

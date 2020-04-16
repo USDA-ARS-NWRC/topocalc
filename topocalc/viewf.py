@@ -110,7 +110,7 @@ def viewcalc(sin_slope, aspect, hcos):
         svf: sky view factor
         tcf: terrain configuration factor
 
-    """
+    """  # noqa
 
     if np.max(sin_slope) > 1:
         raise ValueError('viewcalc: slope may not be supplied as sin(S)')

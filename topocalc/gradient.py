@@ -2,8 +2,7 @@ import numpy as np
 
 
 def gradient_d4(dem, dx, dy, aspect_rad=False):
-    """
-    Calculate the slope and aspect for provided dem,
+    """Calculate the slope and aspect for provided dem,
     this will mimic the original IPW gradient method that
     does a finite difference in the x/y direction
     Given a center cell e and it's neighbors:

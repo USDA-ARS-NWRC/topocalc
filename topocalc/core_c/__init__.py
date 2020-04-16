@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from . import topo_core
+from . import topo_core  # noqa

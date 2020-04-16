@@ -7,7 +7,7 @@ from smrf.utils.topo.core import topo_core
 
 def hor1d_c(z, spacing, fwd=True):
     """
-    Calculate values of cosines of angles to horizons in 1 dimension, 
+    Calculate values of cosines of angles to horizons in 1 dimension,
     measured from zenith, from elevation difference and distance.  Let
     G be the horizon angle from horizontal and note that:
 

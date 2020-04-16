@@ -38,7 +38,9 @@ i.write(
 
 # Create a gradient ipw image (slope and aspect)
 # in both 8 and 16 bit resolution
-cmd = 'gradient -i {0} ./tests/Lakes/gold_ipw/gold_dem.ipw > ./tests/Lakes/gold_ipw/gold_gradient{0}.ipw'
+cmd = "gradient -i {0} ./tests/Lakes/gold_ipw/gold_dem.ipw >" \
+    "./tests/Lakes/gold_ipw/gold_gradient{0}.ipw"
+
 for nbit in [8, 16]:
     with subprocess.Popen(
         cmd.format(nbit),
