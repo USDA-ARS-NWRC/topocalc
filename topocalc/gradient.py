@@ -4,22 +4,32 @@ import numpy as np
 def gradient_d4(dem, dx, dy, aspect_rad=False):
     """Calculate the slope and aspect for provided dem,
     this will mimic the original IPW gradient method that
-    does a finite difference in the x/y direction
+    does a finite difference in the x/y direction.
+
     Given a center cell e and it's neighbors:
+
     | a | b | c |
     | d | e | f |
     | g | h | i |
+
     The rate of change in the x direction is
+
     [dz/dx] = (f - d ) / (2 * dx)
+
     The rate of change in the y direction is
+
     [dz/dy] = (h - b ) / (2 * dy)
+
     The slope is calculated as
+
     slope_radians = arctan ( sqrt ([dz/dx]^2 + [dz/dy]^2) )
+
     Args:
         dem: array of elevation values
         dx: cell size along the x axis
         dy: cell size along the y axis
         aspect_rad: turn the aspect from degrees to IPW radians
+
     Returns:
         slope in radians
         aspect in degrees or IPW radians
@@ -59,21 +69,31 @@ def gradient_d8(dem, dx, dy, aspect_rad=False):
     """
     Calculate the slope and aspect for provided dem,
     using a 3x3 cell around the center
+
     Given a center cell e and it's neighbors:
+
     | a | b | c |
     | d | e | f |
     | g | h | i |
+
     The rate of change in the x direction is
+
     [dz/dx] = ((c + 2f + i) - (a + 2d + g) / (8 * dx)
+
     The rate of change in the y direction is
+
     [dz/dy] = ((g + 2h + i) - (a + 2b + c)) / (8 * dy)
-    The slope is calculated as
+
+    The slope is calculated 
+
     slope_radians = arctan ( sqrt ([dz/dx]^2 + [dz/dy]^2) )
+
     Args:
         dem: array of elevation values
         dx: cell size along the x axis
         dy: cell size along the y axis
         aspect_rad: turn the aspect from degrees to IPW radians
+
     Returns:
         slope in radians
         aspect in degrees or IPW radians
@@ -117,13 +137,16 @@ def aspect(dz_dx, dz_dy):
     """
     Calculate the aspect from the finite difference.
     Aspect is degrees clockwise from North (0/360 degrees)
+
     See below for a referance to how ArcGIS calculates slope
     http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/How_Aspect_works/00q900000023000000/
+
     Args:
         dz_dx: finite difference in the x direction
         dz_dy: finite difference in the y direction
+
     Returns
-        aspect in degrees
+        aspect in degrees clockwise from North
     """
 
     # return in degrees
@@ -147,11 +170,14 @@ def aspect_to_ipw_radians(a):
     IPW defines aspect differently than most GIS programs
     so convert an aspect in degrees from due North (0/360)
     to the IPW definition.
+
     Aspect is radians from south (aspect 0 is toward
     the south) with range from -pi to pi, with negative
     values to the west and positive values to the east
+
     Args:
         a: aspect in degrees from due North
+
     Returns
         a: aspect in radians from due South
     """
