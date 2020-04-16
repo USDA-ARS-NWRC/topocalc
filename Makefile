@@ -51,7 +51,7 @@ isort: ## using isort to sort imports
 	isort -rc -vb .
 
 lint: ## check style with flake8
-	flake8 viewf tests
+	flake8 topocalc tests
 
 test: ## run tests quickly with the default Python
 	python setup.py test
@@ -60,15 +60,15 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source viewf setup.py test
+	coverage run --source topocalc setup.py test
 	coverage report -m
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/viewf.rst
+	rm -f docs/topocalc.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ viewf
+	sphinx-apidoc -o docs/ topocalc
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
@@ -96,5 +96,5 @@ gold_skew: ## gold skew files
 gold_horizon: ## gold horizon files
 	./tests/Lakes/gold_ipw/horizon/make_gold_horizon
 
-gold_viewf: ## gold viewf files
-	./tests/Lakes/gold_ipw/viewf/make_gold_viewf
+gold_topocalc: ## gold topocalc files
+	./tests/Lakes/gold_ipw/topocalc/make_gold_topocalc

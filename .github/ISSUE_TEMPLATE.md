@@ -1,4 +1,4 @@
-* viewf version:
+* topocalc version:
 * Python version:
 * Operating System:
 

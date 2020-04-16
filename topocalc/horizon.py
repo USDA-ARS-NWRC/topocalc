@@ -1,7 +1,7 @@
 import numpy as np
 
-from viewf.core_c import topo_core
-from viewf.skew import adjust_spacing, skew
+from topocalc.core_c import topo_core
+from topocalc.skew import adjust_spacing, skew
 
 
 def skew_transpose(dem, spacing, angle):
@@ -64,7 +64,7 @@ def horizon(azimuth, dem, spacing):
     """
 
     if dem.ndim != 2:
-        raise ValueError('viewf input of dem is not a 2D array')
+        raise ValueError('topocalc input of dem is not a 2D array')
 
     if azimuth > 180 or azimuth < -180:
         raise ValueError('azimuth must be between -180 and 180 degrees')

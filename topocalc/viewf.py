@@ -2,8 +2,8 @@ import collections
 
 import numpy as np
 
-from viewf.horizon import horizon
-from viewf.gradient import gradient_d8
+from topocalc.gradient import gradient_d8
+from topocalc.horizon import horizon
 
 
 def d2r(a):

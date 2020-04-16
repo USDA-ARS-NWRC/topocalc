@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from viewf import gradient
+from topocalc import gradient
 
 
 class TestGradient(unittest.TestCase):

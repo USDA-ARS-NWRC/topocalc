@@ -17,9 +17,9 @@ with open('HISTORY.md') as history_file:
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
 
-setup_requirements = [ ]
+setup_requirements = []
 
-test_requirements = [ ]
+test_requirements = []
 
 # force the compiler to use gcc
 os.environ["CC"] = "gcc"
@@ -28,7 +28,7 @@ cmdclass = {'build_ext': build_ext}
 ext_modules = []
 
 # topocalc core c functions
-loc = 'viewf/core_c'  # location of the folder
+loc = 'topocalc/core_c'  # location of the folder
 mname = os.path.join(loc, 'topo_core')
 mname = mname.replace('/', '.')
 ext_modules += [
@@ -58,25 +58,25 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Sky view and terrain configuration factors",
+    description="Topo calculations like gradient and sky view",
     entry_points={
         'console_scripts': [
-            'viewf=viewf.cli:main',
+            'topocalc=topocalc.cli:main',
         ],
     },
     install_requires=requirements,
     license="CC0 1.0",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='viewf',
-    name='viewf',
-    packages=find_packages(include=['viewf', 'viewf.*']),
+    keywords='topocalc',
+    name='topocalc',
+    packages=find_packages(include=['topocalc', 'topocalc.*']),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     cmdclass=cmdclass,
     ext_modules=ext_modules,
-    url='https://github.com/scotthavens/viewf',
+    url='https://github.com/scotthavens/topocalc',
     version='0.1.0',
     zip_safe=False,
 )

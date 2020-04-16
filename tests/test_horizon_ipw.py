@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from spatialnc import ipw
 
-from viewf.horizon import horizon
+from topocalc.horizon import horizon
 
 
 class TestHorizonIPW(unittest.TestCase):

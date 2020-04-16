@@ -1,16 +1,16 @@
 =====
-viewf
+topocalc
 =====
 
 
-.. image:: https://img.shields.io/pypi/v/viewf.svg
-        :target: https://pypi.python.org/pypi/viewf
+.. image:: https://img.shields.io/pypi/v/topocalc.svg
+        :target: https://pypi.python.org/pypi/topocalc
 
-.. image:: https://img.shields.io/travis/scotthavens/viewf.svg
-        :target: https://travis-ci.com/scotthavens/viewf
+.. image:: https://img.shields.io/travis/scotthavens/topocalc.svg
+        :target: https://travis-ci.com/scotthavens/topocalc
 
-.. image:: https://readthedocs.org/projects/viewf/badge/?version=latest
-        :target: https://viewf.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/topocalc/badge/?version=latest
+        :target: https://topocalc.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 
@@ -20,7 +20,7 @@ Python Boilerplate contains all the boilerplate you need to create a Python pack
 
 
 * Free software: MIT license
-* Documentation: https://viewf.readthedocs.io.
+* Documentation: https://topocalc.readthedocs.io.
 
 
 Features

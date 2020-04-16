@@ -1,4 +1,4 @@
-"""Console script for viewf."""
+"""Console script for topocalc."""
 import sys
 
 import click
@@ -6,9 +6,9 @@ import click
 
 @click.command()
 def main(args=None):
-    """Console script for viewf."""
+    """Console script for topocalc."""
     click.echo("Replace this message by putting your code into "
-               "viewf.cli.main")
+               "topocalc.cli.main")
     click.echo("See click documentation at https://click.palletsprojects.com/")
     return 0
 

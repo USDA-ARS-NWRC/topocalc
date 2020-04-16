@@ -1,4 +1,4 @@
-"""Top-level package for viewf."""
+"""Top-level package for topocalc."""
 
 __author__ = """Audrey Roy Greenfeld"""
 __email__ = 'audreyr@example.com'

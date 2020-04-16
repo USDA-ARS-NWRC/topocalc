@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from spatialnc import ipw
 
-from viewf.skew import adjust_spacing, skew
+from topocalc.skew import adjust_spacing, skew
 
 
 class TestSkew(unittest.TestCase):

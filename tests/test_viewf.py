@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-"""Tests for `viewf` package."""
-
-
 import unittest
 
 import numpy as np
 
-from viewf.viewf import viewf
+from topocalc.viewf import viewf
 
 
 class TestViewf(unittest.TestCase):

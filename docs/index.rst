@@ -1,4 +1,4 @@
-Welcome to viewf's documentation!
+Welcome to topocalc's documentation!
 ======================================
 
 .. toctree::

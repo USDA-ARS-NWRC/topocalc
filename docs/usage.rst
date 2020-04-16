@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use viewf in a project::
+To use topocalc in a project::
 
-    import viewf
+    import topocalc
