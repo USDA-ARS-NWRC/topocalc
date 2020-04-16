@@ -52,3 +52,8 @@ class TestSkew(unittest.TestCase):
         for i, a in enumerate(range(0, 45, 5)):
             t = adjust_spacing(50, a)
             self.assertAlmostEqual(t, s[i])
+
+    def test_adjust_spacing(self):
+        """Test error with angle"""
+        self.assertRaises(ValueError, adjust_spacing, 10, -100)
+        self.assertRaises(ValueError, skew, 10, 100)

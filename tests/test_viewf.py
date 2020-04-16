@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from topocalc.viewf import viewf
+from topocalc.viewf import viewcalc, viewf
 
 
 class TestViewf(unittest.TestCase):
@@ -30,3 +30,31 @@ class TestViewf(unittest.TestCase):
             0.5 * np.ones_like(svf[:, 25]),
             atol=1e-3
         )
+
+    def test_viewf_errors_dem(self):
+        """Test viewf dem errors"""
+
+        self.assertRaises(ValueError, viewf, np.ones(10), 10)
+
+    def test_viewf_errors_angles(self):
+        """Test viewf nangles errors"""
+
+        self.assertRaises(ValueError, viewf, np.ones((10, 1)), 10, nangles=10)
+
+    def test_viewf_errors_sin_slope(self):
+        """Test viewf sin_slope errors"""
+
+        self.assertRaises(ValueError, viewf, np.ones(
+            (10, 1)), 10, sin_slope=10*np.ones((10, 1)))
+
+    def test_viewcalc_errors_sin_slope(self):
+        """Test viewcalc sin_slope errors"""
+
+        self.assertRaises(ValueError, viewcalc, 10*np.ones((10, 1)), np.ones(
+            (10, 1)), {})
+
+    def test_viewcalc_errors_aspect(self):
+        """Test viewcalc aspect errors"""
+
+        self.assertRaises(ValueError, viewcalc, np.ones((10, 1)), 10*np.ones(
+            (10, 1)), {})

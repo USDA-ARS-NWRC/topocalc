@@ -64,7 +64,7 @@ def horizon(azimuth, dem, spacing):
     """
 
     if dem.ndim != 2:
-        raise ValueError('topocalc input of dem is not a 2D array')
+        raise ValueError('horizon input of dem is not a 2D array')
 
     if azimuth > 180 or azimuth < -180:
         raise ValueError('azimuth must be between -180 and 180 degrees')
