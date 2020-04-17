@@ -7,12 +7,12 @@ nbands = 2
 bytes = 1 
 bits = 8 
 history = gradient tests/Lakes/gold_ipw/gold_dem.ipw 
-history = /code/ipw/aux/viewf/viewcalc -s /tmp/viewf.14107/gradient 
+history = /code/ipw/aux/viewf/viewcalc -s /tmp/viewf.5557/gradient 
 !<header> basic_image 1 $Revision: 1.11 $
 bytes = 1 
 bits = 8 
 history = gradient tests/Lakes/gold_ipw/gold_dem.ipw 
-history = /code/ipw/aux/viewf/viewcalc -s /tmp/viewf.14107/gradient 
+history = /code/ipw/aux/viewf/viewcalc -s /tmp/viewf.5557/gradient 
 !<header> geo 0 $Revision: 1.7 $
 bline = 4166650 
 bsamp = 320000 

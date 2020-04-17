@@ -96,5 +96,5 @@ gold_skew: ## gold skew files
 gold_horizon: ## gold horizon files
 	./tests/Lakes/gold_ipw/horizon/make_gold_horizon
 
-gold_topocalc: ## gold topocalc files
-	./tests/Lakes/gold_ipw/topocalc/make_gold_topocalc
+gold_viewf: ## gold viewf files
+	./tests/Lakes/gold_ipw/viewf/make_gold_viewf
