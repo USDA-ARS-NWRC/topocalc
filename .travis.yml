@@ -15,8 +15,8 @@ install:
 # Command to run tests, e.g. python setup.py test
 script:
   - tox
-  - coverage run --source topocalc setup.py test
-	- coverage report --fail-under=85
+  #- coverage run --source topocalc setup.py test
+	#- coverage report --fail-under=85
 
 after_success:
   - coveralls
@@ -28,10 +28,10 @@ after_success:
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: scotthavens
+  user: USDA-ARS-NWRC
   password:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: scotthavens/topocalc
+    repo: USDA-ARS-NWRC/topocalc
     python: 3.8
