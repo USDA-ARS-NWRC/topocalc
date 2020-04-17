@@ -9,17 +9,11 @@ python:
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
-  - pip install -U tox-travis coveralls
+  - pip install -U tox-travis
   - pip install -r requirements.txt
 
 # Command to run tests, e.g. python setup.py test
-script:
-  - tox
-  #- coverage run --source topocalc setup.py test
-	#- coverage report --fail-under=85
-
-after_success:
-  - coveralls
+script: tox
 
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
@@ -28,10 +22,10 @@ after_success:
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: USDA-ARS-NWRC
+  user: scotthavens
   password:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: USDA-ARS-NWRC/topocalc
+    repo: scotthavens/topocalc
     python: 3.8
