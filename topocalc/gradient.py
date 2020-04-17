@@ -133,6 +133,20 @@ def gradient_d8(dem, dx, dy, aspect_rad=False):
     return slope, a
 
 
+def calc_slope(dz_dz, dz_dy):
+    """Calculate the slope given the finite differences
+
+    Arguments:
+        dz_dx: finite difference in the x direction
+        dz_dy: finite difference in the y direction
+
+    Returns:
+        slope numpy array
+    """
+
+    return np.arctan(np.sqrt(dz_dx**2 + dz_dy**2))
+
+
 def aspect(dz_dx, dz_dy):
     """
     Calculate the aspect from the finite difference.
