@@ -59,6 +59,11 @@ test: ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox
 	tox
 
+coveralls: ## run coverage and submit to coveralls
+	coverage run --source topocalc setup.py test
+	coverage report --fail-under=85
+	coveralls
+
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source topocalc setup.py test
 	coverage report -m

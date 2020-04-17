@@ -5,7 +5,7 @@
 
 [![GitHub version](https://badge.fury.io/gh/USDA-ARS-NWRC%2Ftopocalc.svg)](https://badge.fury.io/gh/USDA-ARS-NWRC%2Ftopocalc)
 [![Build Status](https://travis-ci.com/USDA-ARS-NWRC/topocalc.svg?branch=master)](https://travis-ci.com/USDA-ARS-NWRC/topocalc)
-[![Coverage Status](https://coveralls.io/repos/github/USDA-ARS-NWRC/topocalc/badge.svg?branch=HEAD)](https://coveralls.io/github/USDA-ARS-NWRC/topocalc?branch=HEAD)
+[![Coverage Status](https://coveralls.io/repos/github/USDA-ARS-NWRC/topocalc/badge.svg?branch=master)](https://coveralls.io/github/USDA-ARS-NWRC/topocalc?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/61032ff69086e1c0bcf1/maintainability)](https://codeclimate.com/github/USDA-ARS-NWRC/topocalc/maintainability)
 
 The `topocalc` package is a collection of functions to calculate various metrics on a digital elevation model (DEM). The calculations follow the equations laid out in [Dozier and Frew, 1990](https://doi.org/10.1109/36.58986) for the gradient, horizon and sky view factor. Currently the supported calculations are:

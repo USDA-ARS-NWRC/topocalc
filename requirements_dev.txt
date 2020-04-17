@@ -11,3 +11,4 @@ jupyterlab
 isort
 matplotlib
 rasterio
+coveralls

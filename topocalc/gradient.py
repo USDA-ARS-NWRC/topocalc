@@ -56,7 +56,7 @@ def gradient_d4(dem, dx, dy, aspect_rad=False):
     # finite difference in the x direction
     dz_dx = (dem_pad[1:-1, 2:] - dem_pad[1:-1, :-2]) / (2 * dx)
 
-    slope = np.arctan(np.sqrt(dz_dx**2 + dz_dy**2))
+    slope = calc_slope(dz_dx, dz_dy)
     a = aspect(dz_dx, dz_dy)
 
     if aspect_rad:
@@ -124,7 +124,7 @@ def gradient_d8(dem, dx, dy, aspect_rad=False):
              (dem_pad[:-2, :-2] + 2*dem_pad[1:-1, :-2] +
               dem_pad[2:, :-2])) / (8 * dx)
 
-    slope = np.arctan(np.sqrt(dz_dx**2 + dz_dy**2))
+    slope = calc_slope(dz_dx, dz_dy)
     a = aspect(dz_dx, dz_dy)
 
     if aspect_rad:
@@ -133,7 +133,7 @@ def gradient_d8(dem, dx, dy, aspect_rad=False):
     return slope, a
 
 
-def calc_slope(dz_dz, dz_dy):
+def calc_slope(dz_dx, dz_dy):
     """Calculate the slope given the finite differences
 
     Arguments:
