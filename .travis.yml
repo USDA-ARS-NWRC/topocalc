@@ -15,7 +15,7 @@ install:
 # Command to run tests, e.g. python setup.py test
 script: make 
 
-after-success:
+after_success:
   - coveralls
 
 # Assuming you have installed the travis-ci CLI tool, after you
