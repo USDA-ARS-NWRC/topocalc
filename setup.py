@@ -15,7 +15,7 @@ with open('README.md') as readme_file:
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
 
-setup_requirements = []
+setup_requirements = requirements
 
 test_requirements = []
 
@@ -65,6 +65,7 @@ setup(
     install_requires=requirements,
     license="CC0 1.0",
     long_description=readme,
+    long_description_content_type="text/markdown",
     include_package_data=True,
     package_data={
         'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
