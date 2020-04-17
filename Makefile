@@ -63,6 +63,9 @@ coverage: ## run coverage and submit
 	coverage run --source topocalc setup.py test
 	coverage report --fail-under=85
 
+coveralls: coverage ## run coveralls
+	coveralls
+
 coverage-html: coverage ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
@@ -101,8 +104,4 @@ gold_horizon: ## gold horizon files
 gold_viewf: ## gold viewf files
 	./tests/Lakes/gold_ipw/viewf/make_gold_viewf
 
-travis: ## travis script
-	tox
-	coverage run --source topocalc setup.py test
-	coverage report --fail-under=85
 

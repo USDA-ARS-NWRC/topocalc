@@ -13,10 +13,10 @@ install:
   - pip install -r requirements.txt
 
 # Command to run tests, e.g. python setup.py test
-script: make travis 
+script: tox 
 
 after_success:
-  - coveralls
+  - make coveralls
 
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
