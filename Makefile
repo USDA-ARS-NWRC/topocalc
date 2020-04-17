@@ -54,7 +54,7 @@ lint: ## check style with flake8
 	flake8 topocalc tests
 
 test: ## run tests quickly with the default Python
-	python setup.py test
+	python3 setup.py test
 
 test-all: ## run tests on every Python version with tox
 	tox
@@ -80,12 +80,12 @@ release: dist ## package and upload a release
 	twine upload dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python3 setup.py sdist
+	python3 setup.py bdist_wheel
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	python3 setup.py install
 
 jl: ## jupyter lab for analysis
 	jupyter lab --no-browser --port=5678 --ip=0.0.0.0 --allow-root

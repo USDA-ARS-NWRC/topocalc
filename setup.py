@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import sys
-from subprocess import check_output
 
 import numpy
 from Cython.Distutils import build_ext
@@ -11,8 +9,8 @@ from setuptools import Extension, find_packages, setup
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.md') as history_file:
-    history = history_file.read()
+# with open('HISTORY.md') as history_file:
+#     history = history_file.read()
 
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
@@ -66,8 +64,11 @@ setup(
     },
     install_requires=requirements,
     license="CC0 1.0",
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     include_package_data=True,
+    package_data={
+        'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
+    },
     keywords='topocalc',
     name='topocalc',
     packages=find_packages(include=['topocalc', 'topocalc.*']),

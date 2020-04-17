@@ -1,8 +1,11 @@
-include AUTHORS.rst
-include CONTRIBUTING.rst
-include HISTORY.rst
+include AUTHORS.md
+include CONTRIBUTING.md
+include HISTORY.md
 include LICENSE
-include README.rst
+include README.md
+include requirements.txt
+
+global-include *.txt *.md *.pyx *.pxd *.c *.h
 
 recursive-include tests *
 recursive-exclude * __pycache__

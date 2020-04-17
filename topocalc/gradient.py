@@ -84,7 +84,7 @@ def gradient_d8(dem, dx, dy, aspect_rad=False):
 
     [dz/dy] = ((g + 2h + i) - (a + 2b + c)) / (8 * dy)
 
-    The slope is calculated 
+    The slope is calculated
 
     slope_radians = arctan ( sqrt ([dz/dx]^2 + [dz/dy]^2) )
 
