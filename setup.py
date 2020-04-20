@@ -36,8 +36,8 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
-              extra_compile_args=['-fopenmp', '-O3'],
-              extra_link_args=['-fopenmp', '-O3']
+              extra_compile_args=['-O3'],
+              extra_link_args=['-O3']
               ),
 ]
 
@@ -67,9 +67,9 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    package_data={
-        'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
-    },
+    # package_data={
+    #     'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
+    # },
     keywords='topocalc',
     name='topocalc',
     packages=find_packages(include=['topocalc', 'topocalc.*']),
@@ -78,7 +78,7 @@ setup(
     tests_require=test_requirements,
     cmdclass=cmdclass,
     ext_modules=ext_modules,
-    url='https://github.com/scotthavens/topocalc',
+    url='https://github.com/USDA-ARS-NWRC/topocalc',
     version='0.1.0',
     zip_safe=False,
 )

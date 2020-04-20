@@ -7,7 +7,7 @@ include requirements.txt
 
 global-include *.txt *.md *.pyx *.pxd *.c *.h
 
-recursive-include tests *
+recursive-include topocalc/tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 

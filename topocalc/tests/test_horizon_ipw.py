@@ -1,4 +1,5 @@
 import unittest
+import os
 
 import numpy as np
 from spatialnc import ipw
@@ -29,8 +30,11 @@ class TestHorizonIPW(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
 
+        test_dir = os.path.dirname(os.path.abspath(__file__))
+
         # input DEM
-        infile = 'tests/Lakes/gold_ipw/gold_dem.ipw'
+        infile = os.path.join(
+            test_dir, 'Lakes/gold_ipw/gold_dem.ipw')
         d = ipw.IPW(infile)
 
         # C code for hor1d is expecting double
@@ -40,7 +44,8 @@ class TestHorizonIPW(unittest.TestCase):
         cls.spacing = d.bands[0].dline
 
         # Horizon gold files
-        cls.gold_file = 'tests/Lakes/gold_ipw/horizon/horizon_{}.ipw'
+        cls.gold_file = os.path.join(
+            test_dir, 'Lakes/gold_ipw/horizon/horizon_{}.ipw')
 
         # to make a fair comparison, first convert the hcos to
         # integers then back using the 16 bit LQ

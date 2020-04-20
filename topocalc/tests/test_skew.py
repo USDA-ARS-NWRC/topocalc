@@ -1,4 +1,5 @@
 import unittest
+import os
 
 import numpy as np
 from spatialnc import ipw
@@ -11,11 +12,14 @@ class TestSkew(unittest.TestCase):
     def test_skew(self):
         """ Test the skew of an image """
 
+        test_dir = os.path.dirname(os.path.abspath(__file__))
+
         # read in the dem from the gold file as we're
         # comparing the arrays at the end and it will
         # ensure that the bit resolution is kept
 
-        infile = 'tests/Lakes/gold_ipw/gold_dem.ipw'
+        infile = os.path.join(
+            test_dir, 'Lakes/gold_ipw/gold_dem.ipw')
         d = ipw.IPW(infile)
         gold_dem = d.bands[0].data
 
@@ -23,7 +27,11 @@ class TestSkew(unittest.TestCase):
 
             # Get the IPW gold skew values
             gold = ipw.IPW(
-                './tests/Lakes/gold_ipw/skew/skew_{}.ipw'.format(angle))
+                os.path.join(
+                    test_dir,
+                    'Lakes/gold_ipw/skew/skew_{}.ipw'.format(angle)
+                )
+            )
             gold_data = gold.bands[0].data
 
             # skew the initial array
