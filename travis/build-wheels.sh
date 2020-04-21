@@ -10,15 +10,15 @@ PYBIN=/opt/python/${PYVER}/bin
 echo "building for ${PYBIN}"
 ${PYBIN}/pip install -r /io/requirements.txt
 ${PYBIN}/pip install nose
-${PYBIN}/pip wheel --no-deps /io/ -w wheelhouse/
+${PYBIN}/pip wheel --no-deps /io/ -w dist/
 
 # Bundle external shared libraries into the wheels
-for whl in wheelhouse/topocalc*.whl; do
-    auditwheel repair $whl -w /io/wheelhouse/
+for whl in dist/topocalc*.whl; do
+    auditwheel repair $whl -w /io/dist/
 done
 
 # Install packages and test
-${PYBIN}/pip install topocalc --no-index -f /io/wheelhouse
+${PYBIN}/pip install topocalc --no-index -f /io/dist
 ${PYBIN}/pip show topocalc
 cd ${HOME}
 ${PYBIN}/nosetests -vv --exe topocalc

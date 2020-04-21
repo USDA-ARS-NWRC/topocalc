@@ -4,6 +4,9 @@
 # Perform testing with tox on linux for various version of python
 os: linux
 dist: xenial
+
+notifications:
+  email: false
   
 language: python
 # python:
@@ -31,14 +34,26 @@ language: python
 services:
   - docker
   
-wheels: &build-wheels
+build-wheels: &build-wheels
   stage: wheels and test
+  # if: type = pull_request or branch=master
+  # https://docs.travis-ci.com/user/conditions-v1
   install:
     - docker pull $DOCKER_IMAGE
   script:
     - export PYVER=$PYVER
     - docker run -e "PYVER=$PYVER" --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
-    - ls wheelhouse/
+    - ls dist/
+  deploy:
+    provider: pypi
+    distributions: sdist # This will pick up the .whl in dist/
+    user: __token__
+    password:
+      secure: VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
+    on:
+      branch: master
+      # tags: true
+      repo: scotthavens/topocalc
 
 jobs:
   include:
@@ -53,7 +68,7 @@ jobs:
         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
     - <<: *build-wheels
       env:
-        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38m
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
 
 # # Assuming you have installed the travis-ci CLI tool, after you
 # # create the Github repo and add it to Travis, run the
