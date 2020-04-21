@@ -3,25 +3,25 @@
 # Stage 1
 # Perform testing with tox on linux for various version of python
 os: linux
-dist: 
+dist: xenial
   
 language: python
-python:
-  - 3.8
-  - 3.7
-  - 3.6
-  - 3.5
+# python:
+#   - 3.8
+#   - 3.7
+#   - 3.6
+#   - 3.5
 
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: 
-  - pip install -U tox-travis coveralls
-  - pip install -r requirements.txt
+# # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+# install: 
+#   - pip install -U tox-travis coveralls
+#   - pip install -r requirements.txt
 
-# Command to run tests, e.g. python setup.py test
-script: tox 
+# # Command to run tests, e.g. python setup.py test
+# script: tox 
 
-after_success:
-  - make coveralls
+# after_success:
+#   - make coveralls
 
 
 # Stage 2
@@ -39,23 +39,21 @@ wheels: &build-wheels
     - export PYVER=$PYVER
     - docker run -e "PYVER=$PYVER" --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
     - ls wheelhouse/
-  env:
-    - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
 
 jobs:
   include:
     - <<: *build-wheels
       env:
-        - PYVER=cp35-cp35m
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
     - <<: *build-wheels
       env:
-        - PYVER=cp36-cp36m
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
     - <<: *build-wheels
       env:
-        - PYVER=cp37-cp37m
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
     - <<: *build-wheels
       env:
-        - PYVER=cp38-cp38m
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38m
 
 # # Assuming you have installed the travis-ci CLI tool, after you
 # # create the Github repo and add it to Travis, run the
