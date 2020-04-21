@@ -80,6 +80,8 @@ setup(
     ext_modules=ext_modules,
     url='https://github.com/USDA-ARS-NWRC/topocalc',
     # version='0.1.0',
-    use_scm_version=True,
+    use_scm_version={
+        "local_scheme": "no-local-version"
+    },
     zip_safe=False,
 )
