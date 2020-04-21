@@ -33,7 +33,7 @@ services:
   
 build-wheels: &build-wheels
   stage: wheels and test
-  if: type = pull_request OR branch = master OR branch = /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/
+  if: type = pull_request OR branch = master
   install:
     - docker pull $DOCKER_IMAGE
   script:
