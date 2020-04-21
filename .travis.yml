@@ -47,11 +47,9 @@ build-wheels: &build-wheels
     password:
       secure: VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
     on:
-      branches:
-        only:
-          - master
-          - /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/
-      tags: true
+      branches: master
+          # - /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/
+      # tags: true
       repo: USDA-ARS-NWRC/topocalc
 
 jobs:
