@@ -4,9 +4,6 @@
 # Perform testing with tox on linux for various version of python
 os: linux
 dist: xenial
-
-notifications:
-  email: false
   
 language: python
 # python:
@@ -53,7 +50,7 @@ build-wheels: &build-wheels
     on:
       branch: master
       # tags: true
-      repo: scotthavens/topocalc
+      repo: USDA-ARS-NWRC/topocalc
 
 jobs:
   include:
