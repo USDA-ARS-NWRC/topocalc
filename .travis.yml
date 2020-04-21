@@ -33,7 +33,7 @@ services:
   
 build-wheels: &build-wheels
   stage: wheels and test
-  if: type = pull_request OR branch = master
+  if: type = pull_request OR branch = master OR branch = /v\d+\.\d+[a-z]/
   install:
     - docker pull $DOCKER_IMAGE
   script:
@@ -49,7 +49,6 @@ build-wheels: &build-wheels
     on:
       branches:
         only:
-          - master
           - /v\d+\.\d+[a-z]/
       tags: true
       repo: USDA-ARS-NWRC/topocalc
