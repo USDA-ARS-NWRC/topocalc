@@ -74,7 +74,7 @@ setup(
     name='topocalc',
     packages=find_packages(include=['topocalc', 'topocalc.*']),
     setup_requires=setup_requirements,
-    test_suite='tests',
+    test_suite='topocalc.tests',
     tests_require=test_requirements,
     cmdclass=cmdclass,
     ext_modules=ext_modules,
