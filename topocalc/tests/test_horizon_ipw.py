@@ -1,5 +1,5 @@
-import unittest
 import os
+import unittest
 
 import numpy as np
 from spatialnc import ipw
