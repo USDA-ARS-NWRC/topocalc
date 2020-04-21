@@ -15,7 +15,7 @@ with open('README.md') as readme_file:
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
 
-setup_requirements = requirements
+setup_requirements = ['setuptools_scm']
 
 test_requirements = []
 
@@ -79,6 +79,7 @@ setup(
     cmdclass=cmdclass,
     ext_modules=ext_modules,
     url='https://github.com/USDA-ARS-NWRC/topocalc',
-    version='0.1.0',
+    # version='0.1.0',
+    use_scm_version=True,
     zip_safe=False,
 )
