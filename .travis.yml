@@ -1,5 +1,7 @@
 # Config file for automatic testing at travis-ci.com
 
+# Stage 1
+# Perform testing with tox on linux for various version of python
 language: python
 python:
   - 3.8
@@ -18,17 +20,40 @@ script: tox
 after_success:
   - make coveralls
 
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: scotthavens
-  password:
-    secure: PLEASE_REPLACE_ME
-  on:
-    tags: true
-    repo: scotthavens/topocalc
-    python: 3.8
+
+# Stage 2
+# Build the wheels and test to ensure that the released version will work
+sudo: required
+
+services:
+  - docker
+  
+wheels: &wheels
+  stage: wheels and test
+  install:
+    - docker pull $DOCKER_IMAGE
+  script:
+    - export PYVER=$PYVER
+    - docker run -e "PYVER=$PYVER" --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+    - ls wheelhouse/
+
+jobs:
+  include:
+    - <<: *wheels
+      env:
+        - DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 PYVER=cp35-cp35m
+
+# # Assuming you have installed the travis-ci CLI tool, after you
+# # create the Github repo and add it to Travis, run the
+# # following command to finish PyPI deployment setup:
+# # $ travis encrypt --add deploy.password
+# deploy:
+#   provider: pypi
+#   distributions: sdist bdist_wheel
+#   user: scotthavens
+#   password:
+#     secure: PLEASE_REPLACE_ME
+#   on:
+#     tags: true
+#     repo: scotthavens/topocalc
+#     python: 3.8
