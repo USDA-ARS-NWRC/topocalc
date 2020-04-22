@@ -11,6 +11,10 @@ language: python
 services:
   - docker
 
+stages:
+  - test
+  - build-wheels
+
 
 # python:
 #   - 3.8
@@ -18,7 +22,22 @@ services:
 #   - 3.6
 #   - 3.5
 
-matrix:
+# before_install:
+#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
+#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install graphviz; fi
+
+# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install: 
+  - pip install -U tox-travis coveralls
+  - pip install -r requirements.txt
+
+# Command to run tests, e.g. python setup.py test
+script: tox 
+
+# after_success:
+#   - make coveralls
+
+jobs:
   include:
     # os: linux, dist: xenial
     - python: 3.5
@@ -47,20 +66,7 @@ matrix:
         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
 
 
-# before_install:
-#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
-#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install graphviz; fi
 
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: 
-  - pip install -U tox-travis coveralls
-  - pip install -r requirements.txt
-
-# Command to run tests, e.g. python setup.py test
-script: tox 
-
-# after_success:
-#   - make coveralls
 
 # Stage 2
 # Build the wheels and test to ensure that the released version will work
