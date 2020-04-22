@@ -42,15 +42,15 @@ jobs:
       python: 3.5
       env: TOXENV=py35
 
-      - <<: *unittest
+    - <<: *unittest
       python: 3.6
       env: TOXENV=py36,flake8,coverage
 
-      - <<: *unittest
+    - <<: *unittest
       python: 3.7
       env: TOXENV=py37
 
-      - <<: *unittest
+    - <<: *unittest
       python: 3.8
       env: TOXENV=py38
 
