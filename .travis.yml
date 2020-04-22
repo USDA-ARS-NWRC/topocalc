@@ -45,6 +45,7 @@ ci-build-wheels: &ci-build-wheels
   services: docker
   os: linux
   dist: xenial
+  language: python
   install: python3 -m pip install cibuildwheel==1.3.0
   script: python3 -m cibuildwheel --output-dir wheelhouse
   after_success: |
@@ -70,12 +71,6 @@ jobs:
     # - <<: *unittest
     #   python: 3.8
     #   env: TOXENV=py38
-
-    # - <<: *unittest
-    #   os: osx
-    #   osx_image: xcode9.4  # Python 3.6.5 running on macOS 10.13
-    #   language: shell
-    #   env: TOXENV=py36
 
     # - <<: *unittest
     #   os: osx
