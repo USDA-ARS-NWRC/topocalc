@@ -79,19 +79,19 @@ jobs:
       os: osx
       python: 3.6
       language: shell
-      env: TOXENV=py35
+      env: TOXENV=py36
 
     - <<: *unittest
       os: osx
       python: 3.7
       language: shell
-      env: TOXENV=py35
+      env: TOXENV=py37
 
     - <<: *unittest
       os: osx
       python: 3.8
       language: shell
-      env: TOXENV=py35
+      env: TOXENV=py38
           
     # build wheels stage
     - <<: *build-wheels
