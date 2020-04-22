@@ -7,24 +7,20 @@
 #   - osx
   
 language: python
+
+services:
+  - docker
+
+
 # python:
 #   - 3.8
 #   - 3.7
 #   - 3.6
 #   - 3.5
 
-#
-# Test test matrix is spelled out explicitly here.
-#
-# For each supported version of Python, we will test with:
-#
-#  * The first minor version of Twisted for each major version that supports
-#    the tested version of Python, covering two years of releases.
-#
-#  * The current release of Twisted.
-#
 matrix:
   include:
+    # os: linux, dist: xenial
     - python: 3.5
       env: TOXENV=py35
 
@@ -36,6 +32,19 @@ matrix:
 
     - python: 3.8
       env: TOXENV=py38
+
+    - <<: *build-wheels
+      env:
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
+    - <<: *build-wheels
+      env:
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
+    - <<: *build-wheels
+      env:
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
+    - <<: *build-wheels
+      env:
+        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
 
 
 # before_install:
@@ -57,9 +66,8 @@ script: tox
 # Build the wheels and test to ensure that the released version will work
 # sudo: required
 
-services:
-  - docker
-  
+
+
 build-wheels: &build-wheels
   stage: wheels and test
   if: type = pull_request OR branch = master OR tag IS present
@@ -80,17 +88,17 @@ build-wheels: &build-wheels
       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+
       repo: USDA-ARS-NWRC/topocalc
 
-jobs:
-  include:
-    - <<: *build-wheels
-      env:
-        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
-    - <<: *build-wheels
-      env:
-        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
-    - <<: *build-wheels
-      env:
-        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
-    - <<: *build-wheels
-      env:
-        - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
+# jobs:
+#   include:
+#     - <<: *build-wheels
+#       env:
+#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
+#     - <<: *build-wheels
+#       env:
+#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
+#     - <<: *build-wheels
+#       env:
+#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
+#     - <<: *build-wheels
+#       env:
+#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
