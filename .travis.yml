@@ -6,6 +6,16 @@ stages:
   - name: deploy
     # if:  type = pull_request OR branch = master OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
 
+env:
+  global:
+    - CIBW_TEST_REQUIRES=nose
+    - CIBW_TEST_COMMAND="nosetests -vv --exe {project}/tests"
+    - CIBW_BUILD="cp36-manylinux_x86_64"
+    - CIBW_SKIP="?p27* pp*"
+    - CIBW_BUILD_VERBOSITY=3
+    - TWINE_USERNAME=__token__
+    - TWINE_PASSWORD=VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
+
 # defining the unittest jobs
 unittest: &unittest
   stage: test
@@ -46,9 +56,7 @@ ci-build-wheels: &ci-build-wheels
   os: linux
   dist: xenial
   language: python
-  install: |
-    python3 -m pip install -r requirements.txt
-    python3 -m pip install cibuildwheel==1.3.0
+  install: python3 -m pip install cibuildwheel==1.3.0
   script: python3 -m cibuildwheel --output-dir wheelhouse
   after_success: |
     ls wheelhouse
@@ -85,15 +93,7 @@ jobs:
     - <<: *ci-build-wheels
       python: 3.6
 
-env:
-  global:
-    - CIBW_TEST_REQUIRES=nose
-    - CIBW_TEST_COMMAND="nosetests -vv --exe {project}/tests"
-    - CIBW_BUILD = cp35-manylinux_x86_64
-    - CIBW_SKIP = "?p27* pp*"
-    - CIBW_BUILD_VERBOSITY = 1
-    - TWINE_USERNAME = __token__
-    - TWINE_PASSWORD = VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
+
 
     # - <<: *build-wheels
     #   env:
