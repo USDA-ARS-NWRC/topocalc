@@ -9,7 +9,7 @@ stages:
 env:
   global:
     - CIBW_TEST_REQUIRES=nose
-    - CIBW_TEST_COMMAND="nosetests -vv --exe {project}/tests"
+    - CIBW_TEST_COMMAND="nosetests -vv --exe topocalc"
     - CIBW_BUILD="cp36-manylinux_x86_64"
     - CIBW_SKIP="?p27* pp*"
     - CIBW_BUILD_VERBOSITY=3
