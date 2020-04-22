@@ -8,7 +8,6 @@ stages:
 # defining the unittest jobs
 unittest: &unittest
   stage: test
-  name: "Testing"
   os: linux
   dist: xenial
   language: python
@@ -58,23 +57,41 @@ jobs:
       python: 3.5
       env: TOXENV=py35
 
-    # - <<: *unittest
-    #   python: 3.6
-    #   env: TOXENV=py36,flake8,coverage
+    - <<: *unittest
+      python: 3.6
+      env: TOXENV=py36,flake8,coverage
 
-    # - <<: *unittest
-    #   python: 3.7
-    #   env: TOXENV=py37
+    - <<: *unittest
+      python: 3.7
+      env: TOXENV=py37
 
-    # - <<: *unittest
-    #   python: 3.8
-    #   env: TOXENV=py38
+    - <<: *unittest
+      python: 3.8
+      env: TOXENV=py38
 
     - <<: *unittest
       os: osx
-      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+      python: 3.5
       language: shell
-      env: TOXENV=py37
+      env: TOXENV=py35
+
+    - <<: *unittest
+      os: osx
+      python: 3.6
+      language: shell
+      env: TOXENV=py35
+
+    - <<: *unittest
+      os: osx
+      python: 3.7
+      language: shell
+      env: TOXENV=py35
+
+    - <<: *unittest
+      os: osx
+      python: 3.8
+      language: shell
+      env: TOXENV=py35
           
     # build wheels stage
     - <<: *build-wheels
