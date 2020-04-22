@@ -2,15 +2,45 @@
 
 # Stage 1
 # Perform testing with tox on linux for various version of python
-os: linux
-dist: xenial
+# os:
+#   - linux
+#   - osx
   
-language: python
-python:
-  - 3.8
-  - 3.7
-  - 3.6
-  - 3.5
+# language: python
+# python:
+#   - 3.8
+#   - 3.7
+#   - 3.6
+#   - 3.5
+
+#
+# Test test matrix is spelled out explicitly here.
+#
+# For each supported version of Python, we will test with:
+#
+#  * The first minor version of Twisted for each major version that supports
+#    the tested version of Python, covering two years of releases.
+#
+#  * The current release of Twisted.
+#
+matrix:
+  include:
+    - python: 3.5
+      env: TOXENV=py35
+
+    - python: 3.6
+      env: py36, flake8, coverage
+
+    - python: 3.7
+      env: TOXENV=py37
+
+    - python: 3.8
+      env: TOXENV=py38
+
+
+# before_install:
+#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
+#   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install graphviz; fi
 
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
@@ -20,9 +50,8 @@ install:
 # Command to run tests, e.g. python setup.py test
 script: tox 
 
-after_success:
-  - make coveralls
-
+# after_success:
+#   - make coveralls
 
 # Stage 2
 # Build the wheels and test to ensure that the released version will work
@@ -48,8 +77,6 @@ build-wheels: &build-wheels
       secure: VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
     on:
       all_branches: true
-        # - /^v([0-9]+)\.([0-9]+)\.([0-9]+)$/
-      # tags: true
       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+
       repo: USDA-ARS-NWRC/topocalc
 
