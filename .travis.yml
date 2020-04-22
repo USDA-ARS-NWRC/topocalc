@@ -5,8 +5,10 @@ stages:
   - test
   - build-wheels
 
+# defining the unittest jobs
 unittest: &unittest
   stage: test
+  name: "Testing"
   os: linux
   dist: xenial
   language: python
@@ -15,8 +17,22 @@ unittest: &unittest
     - pip install -r requirements.txt
   script: tox
 
+# # defining the unittest jobs
+# unittest-osx: &unittest-osx
+#   stage: test-linux
+#   name: "Testing on Linux"
+#   os: osx
+#   osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+#   language: shell       # 'language: python' is an error on Travis CI macOS
+#   install: 
+#     - pip install -U tox-travis coveralls
+#     - pip install -r requirements.txt
+#   script: tox
+
+# Defining the build for the linux wheels
 build-wheels: &build-wheels
-  stage: wheels and test
+  stage: build-wheels
+  name: "Build Linux wheels"
   if: type = pull_request OR branch = master OR tag IS present
   install:
     - docker pull $DOCKER_IMAGE
@@ -42,21 +58,40 @@ jobs:
       python: 3.5
       env: TOXENV=py35
 
-    - <<: *unittest
-      python: 3.6
-      env: TOXENV=py36,flake8,coverage
+    # - <<: *unittest
+    #   python: 3.6
+    #   env: TOXENV=py36,flake8,coverage
+
+    # - <<: *unittest
+    #   python: 3.7
+    #   env: TOXENV=py37
+
+    # - <<: *unittest
+    #   python: 3.8
+    #   env: TOXENV=py38
 
     - <<: *unittest
-      python: 3.7
+      os: osx
+      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+      language: shell
       env: TOXENV=py37
-
-    - <<: *unittest
-      python: 3.8
-      env: TOXENV=py38
-
+          
+    # build wheels stage
     - <<: *build-wheels
       env:
         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
+
+    # - <<: *build-wheels
+    #   env:
+    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
+
+    # - <<: *build-wheels
+    #   env:
+    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
+
+    # - <<: *build-wheels
+    #   env:
+    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
 
 
 # # Config file for automatic testing at travis-ci.com
@@ -127,64 +162,3 @@ jobs:
 #       all_branches: true
 #       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+
 #       repo: USDA-ARS-NWRC/topocalc
-
-
-# jobs:
-#   include:
-#     # test stage
-#     # os: linux, dist: xenial
-#     - <<: *unittest
-#       python: 3.5
-#       env: TOXENV=py35
-
-#     - <<: *unittest
-#       python: 3.6
-#       env: TOXENV=py36,flake8,coverage
-
-#     - <<: *unittest
-#       python: 3.7
-#       env: TOXENV=py37
-
-#     - <<: *unittest
-#       python: 3.8
-#       env: TOXENV=py38
-
-#     # build wheels stage
-#     - <<: *build-wheels
-#       env:
-#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
-#     - <<: *build-wheels
-#       env:
-#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
-#     - <<: *build-wheels
-#       env:
-#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
-#     - <<: *build-wheels
-#       env:
-#         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
-
-
-
-
-# # Stage 2
-# # Build the wheels and test to ensure that the released version will work
-# # sudo: required
-
-
-
-
-
-# # jobs:
-# #   include:
-# #     - <<: *build-wheels
-# #       env:
-# #         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp35-cp35m
-# #     - <<: *build-wheels
-# #       env:
-# #         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
-# #     - <<: *build-wheels
-# #       env:
-# #         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
-# #     - <<: *build-wheels
-# #       env:
-# #         - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
