@@ -2,7 +2,7 @@
 #   - linux python 3.5, 3.6, 3.7, 3.8
 #   - osx python 3.7
 #
-# deploy stage builds the wheels when jobs is
+# deploy stage builds and test the wheels when jobs is
 #   - pull request
 #   - master branch
 #   - tagged commit, only this will be uploaded to pypi
@@ -75,6 +75,8 @@ jobs:
     # Deploy source distribution
     - stage: deploy
       name: Deploy source distribution
+      language: python
+      python: 3.6
       install: skip
       script: travis/build-sdist.sh
           

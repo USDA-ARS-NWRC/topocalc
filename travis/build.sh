@@ -1,4 +1,6 @@
 #!/bin/bash
+# Use cibuildwheel to build all the wheels
+# Only upload if a tagged commit
 
 set -e -x
 
