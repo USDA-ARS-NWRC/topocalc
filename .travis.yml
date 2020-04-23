@@ -28,28 +28,6 @@ unittest: &unittest
     - pip install -r requirements.txt
   script: tox
 
-# # Defining the build for the linux wheels
-# build-wheels: &build-wheels
-#   stage: build-wheels
-#   name: "Build Linux wheels"
-#   if: type = pull_request OR branch = master OR tag IS present
-#   install:
-#     - docker pull $DOCKER_IMAGE
-#   script:
-#     - export PYVER=$PYVER
-#     - docker run -e "PYVER=$PYVER" --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
-#     - ls dist/
-#   deploy:
-#     provider: pypi
-#     distributions: sdist # This will pick up the .whl in dist/
-#     username: __token__
-#     password:
-#       secure: VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
-#     on:
-#       all_branches: true
-#       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+
-#       repo: USDA-ARS-NWRC/topocalc
-
 ci-build-wheels: &ci-build-wheels
   stage: deploy
   services: docker
@@ -66,28 +44,28 @@ ci-build-wheels: &ci-build-wheels
 
 jobs:
   include:
-    # test stage
-    - <<: *unittest
-      python: 3.5
-      env: TOXENV=py35
+    # # test stage
+    # - <<: *unittest
+    #   python: 3.5
+    #   env: TOXENV=py35
 
-    - <<: *unittest
-      python: 3.6
-      env: TOXENV=py36,flake8,coverage
+    # - <<: *unittest
+    #   python: 3.6
+    #   env: TOXENV=py36,flake8,coverage
 
-    - <<: *unittest
-      python: 3.7
-      env: TOXENV=py37
+    # - <<: *unittest
+    #   python: 3.7
+    #   env: TOXENV=py37
 
-    - <<: *unittest
-      python: 3.8
-      env: TOXENV=py38
+    # - <<: *unittest
+    #   python: 3.8
+    #   env: TOXENV=py38
 
-    - <<: *unittest
-      os: osx
-      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
-      language: shell
-      env: TOXENV=py37
+    # - <<: *unittest
+    #   os: osx
+    #   osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+    #   language: shell
+    #   env: TOXENV=py37
           
     # Deploy on linux
     - <<: *ci-build-wheels
