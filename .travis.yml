@@ -4,7 +4,7 @@ services:
 stages:
   - test
   - name: deploy
-    # if:  type = pull_request OR branch = master OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
+    if:  type = pull_request OR branch = master OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
 
 env:
   global:
@@ -28,6 +28,7 @@ unittest: &unittest
     - pip install -r requirements.txt
   script: tox
 
+# build the wheels with cibuildwheel
 ci-build-wheels: &ci-build-wheels
   stage: deploy
   services: docker
@@ -38,34 +39,33 @@ ci-build-wheels: &ci-build-wheels
   script: python3 -m cibuildwheel --output-dir wheelhouse
   after_success: |
     ls wheelhouse
-    
-  # python3 -m pip install twine
-  # python3 -m twine upload --skip-existing wheelhouse/*.whl
+    python3 -m pip install twine
+    python3 -m twine upload --skip-existing wheelhouse/*.whl
 
 jobs:
   include:
-    # # test stage
-    # - <<: *unittest
-    #   python: 3.5
-    #   env: TOXENV=py35
+    # test stage
+    - <<: *unittest
+      python: 3.5
+      env: TOXENV=py35
 
-    # - <<: *unittest
-    #   python: 3.6
-    #   env: TOXENV=py36,flake8,coverage
+    - <<: *unittest
+      python: 3.6
+      env: TOXENV=py36,flake8,coverage
 
-    # - <<: *unittest
-    #   python: 3.7
-    #   env: TOXENV=py37
+    - <<: *unittest
+      python: 3.7
+      env: TOXENV=py37
 
-    # - <<: *unittest
-    #   python: 3.8
-    #   env: TOXENV=py38
+    - <<: *unittest
+      python: 3.8
+      env: TOXENV=py38
 
-    # - <<: *unittest
-    #   os: osx
-    #   osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
-    #   language: shell
-    #   env: TOXENV=py37
+    - <<: *unittest
+      os: osx
+      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+      language: shell
+      env: TOXENV=py37
           
     # Deploy on linux
     - <<: *ci-build-wheels
@@ -76,86 +76,3 @@ jobs:
       name: Build and deploy macOS wheels
       os: osx
       language: shell
-
-
-    # - <<: *build-wheels
-    #   env:
-    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp36-cp36m
-
-    # - <<: *build-wheels
-    #   env:
-    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp37-cp37m
-
-    # - <<: *build-wheels
-    #   env:
-    #     - DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PYVER=cp38-cp38
-
-
-# # Config file for automatic testing at travis-ci.com
-
-# # Stage 1
-# # Perform testing with tox on linux for various version of python
-# # os:
-# #   - linux
-# #   - osx
-  
-# language: generic
-
-# services:
-#   - docker
-
-# stages:
-#   - test
-#   - build-wheels
-
-
-# # python:
-# #   - 3.8
-# #   - 3.7
-# #   - 3.6
-# #   - 3.5
-
-# # before_install:
-# #   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
-# #   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install graphviz; fi
-
-# # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-# # install: 
-# #   - pip install -U tox-travis coveralls
-# #   - pip install -r requirements.txt
-
-# # # Command to run tests, e.g. python setup.py test
-# # script: tox 
-
-# # after_success:
-# #   - make 
-
-# unittest: &unittest
-#   stage: test
-#   os: linux
-#   dist: xenial
-#   install: 
-#     - pip install -U tox-travis coveralls
-#     - pip install -r requirements.txt
-#   script: tox
-
-
-# build-wheels: &build-wheels
-#   stage: wheels and test
-#   if: type = pull_request OR branch = master OR tag IS present
-#   install:
-#     - docker pull $DOCKER_IMAGE
-#   script:
-#     - export PYVER=$PYVER
-#     - docker run -e "PYVER=$PYVER" --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
-#     - ls dist/
-#   deploy:
-#     provider: pypi
-#     distributions: sdist # This will pick up the .whl in dist/
-#     username: __token__
-#     password:
-#       secure: VyeDhofKro9+sctPztnzNjtSqgMialSHixEXCW/fqy7KB5+sm22s1HrUj8bGt/qmKg/GjaSLY5fUBRjOBLxQyOH1RIuFQeBfFftrFsKBnIhXGZ91qmoDoadohpvs1UzPs4+SyUXl4sTR8nSMryQpfIYYzQ3U0H5UGNTUR2QIgFQszUYqBwle3tTlHiEdB7HuD1Vo6aMQzuDAKxAT5JwWRbPubAPqs/MUl9Ikudoj9qoY6KsqLe3HJWvT/7SKggYstiv/bTBmPctaZPJQCzkmoboqK2rx+wPwHnjDhmlFqKVJUBvu6pf6Hcm/JpdE1ATVfuaibgAeBjVf+m/qzpyfyLEpEzI813C88yqJENc40PQAYZi1ADM3yDAMqgodwt/TO5sW67JKFnu4uco3N7pxGxYcROMg6a8asm/0b9KuvuzvBmDkYyhLW2+5j1sRCGEigpcqO6idaI5ppgMy+E8MAud3eqWhenudVuyG2jWkIw7DqwYTlOMWusJy6vNirKxKoi5O+n3tuoQdLejEB5fUti0AZuIlPZtcUjau6ShDUKjBhT1mQfkFo8/sT0oU3YbvqQJX98QCZmW7lZjakekSHD+/b2gPlzdZajoXAl8NainPVwl3xA0vxfi4nSLrHmdv2hR78+oFgfZABvBqAylYX3VlNGaZ5qsJpyz09iebpDA=
-#     on:
-#       all_branches: true
-#       condition: $TRAVIS_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+
-#       repo: USDA-ARS-NWRC/topocalc
