@@ -11,4 +11,4 @@ isort
 matplotlib
 rasterio
 coveralls
-setuptools_scm
+PyYAML
