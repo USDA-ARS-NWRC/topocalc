@@ -12,11 +12,18 @@ The `topocalc` package is a collection of functions to calculate various metrics
 3. Sky view factor for percent of the sky that is visible from a point on the DEM
 
 - [topocalc](#topocalc)
+- [Backgourd](#backgourd)
   - [Azimuth convention](#azimuth-convention)
   - [Gradient for slope and aspect](#gradient-for-slope-and-aspect)
   - [Horizon angles](#horizon-angles)
   - [Sky view factor](#sky-view-factor)
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [Gradient usage](#gradient-usage)
+  - [Sky view factor usage](#sky-view-factor-usage)
   - [Command Line Interface](#command-line-interface)
+
+# Backgourd
 
 ## Azimuth convention
 
@@ -43,6 +50,45 @@ The values reported from `horizon` are cosine of the horizon angle.
 ## Sky view factor
 
 The sky view factor (`svf`) is the amount of the sky that is visible to a particular point. The `svf` is between 0 and 1 with 1 indicating no obstructions from surrounding terrain and 0 indicating full obstruction. The `svf` uses the slope, aspect and horizon angles for 72 directions to estimate the sky view factor for the DEM.
+
+# Usage
+
+## Installation
+
+> **NOTE**: `topocalc` has only been tested for Python 3.5 to 3.8 on Linux and MacOSX environments.
+
+To install:
+
+`pip install topocalc`
+
+## Gradient usage
+
+```python
+from topocalc.gradient import gradient_d8
+
+# Load the DEM into a numpy array
+dem = load_dem(path_to_dem)
+
+# grid cell spacing for the DEM
+dem_dx = 30
+dem_dy = 30
+
+slope, aspect = gradient_d8(dem, dem_dx, dem_dy)
+```
+
+## Sky view factor usage
+
+```python
+from topocalc.viewf import viewf
+
+# Load the DEM into a numpy array
+dem = load_dem(path_to_dem)
+
+# grid cell spacing for the DEM
+dem_spacing = 30
+
+svf, tvf = viewf(dem, spacing=dem_spacing)
+```
 
 ## Command Line Interface
 
