@@ -62,7 +62,7 @@ class TestShade(unittest.TestCase):
             shade(0, 0, 360, zenith=10)
 
         self.assertTrue(
-            'Azimuth must be between -180 and 180 degrees' in str(context.exception))
+            'Azimuth must be between -180 and 180 degrees' in str(context.exception))  # noqa
 
     def test_shade_west(self):
 
