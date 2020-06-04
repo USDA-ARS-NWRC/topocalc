@@ -23,7 +23,7 @@ The `topocalc` package is a collection of functions to calculate various metrics
   - [Sky view factor usage](#sky-view-factor-usage)
   - [Command Line Interface](#command-line-interface)
 
-# Backgourd
+# Background
 
 ## Azimuth convention
 
@@ -37,7 +37,7 @@ The gradient method calculates the slope and aspect of the input DEM. There are 
 
 `gradient_d8` (the default) uses a second order finite difference for a 3x3 square around a given point on the DEM.
 
-The aspect uses the gradient to calculate the aspect from North (0 degrees). A conversion function will take the aspect in degrees and convert to radians with South being 0.
+The gradient is used to calculate the aspect from North (0 degrees). A conversion function will take the aspect in degrees and convert to radians with South being 0.
 
 ## Horizon angles
 
