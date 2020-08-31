@@ -4,7 +4,7 @@
 #
 # deploy stage builds and test the wheels when jobs is
 #   - pull request
-#   - master branch
+#   - main branch
 #   - tagged commit, only this will be uploaded to pypi
 
 services:
@@ -13,7 +13,7 @@ services:
 stages:
   - test
   - name: deploy
-    if:  type = pull_request OR branch = master OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
+    if:  type = pull_request OR branch = main OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
 
 env:
   global:
