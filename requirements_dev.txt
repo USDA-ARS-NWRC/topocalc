@@ -1,4 +1,5 @@
 -r requirements.txt
+netCDF4>=1.2.9
 wheel==0.33.6
 watchdog==0.9.0
 flake8==3.7.8
