@@ -12,4 +12,5 @@ isort
 matplotlib
 rasterio
 coveralls
+pandas
 PyYAML
