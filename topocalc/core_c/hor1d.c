@@ -239,12 +239,9 @@ int hor1b(
 /*
 **	Calculate values of cosines of angles to horizons, measured
 **	from zenith, from elevation difference and distance.  Let
-**	G be the horizon angle from horizontal and note that:
+**	H be the angle from zenith and note that:
 **
-**		sin G = z / sqrt( z^2 + dis^2);
-**
-**	This result is the same as cos H, where H measured from zenith.
-**  https://github.com/USDA-ARS-NWRC/ipw/blob/main/src/bin/topocalc/horizon/hor1d/horval.c
+**		cos H = z / sqrt( z^2 + dis^2);
 */
 
 void horval(
