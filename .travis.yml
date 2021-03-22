@@ -11,7 +11,8 @@ services:
   - docker
 
 stages:
-  - test
+  - name: test
+    if:  type = pull_request OR branch = main OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
   - name: deploy
     if:  type = pull_request OR branch = main OR tag IS present AND repo = USDA-ARS-NWRC/topocalc
 
