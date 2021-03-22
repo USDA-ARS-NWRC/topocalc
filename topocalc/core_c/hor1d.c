@@ -81,12 +81,12 @@ int hor1f(
     double *z, /* elevation function */
     int *h)    /* horizon function (return) */
 {
-    double sihj; /* slope i to h[j] */
-    double sij;  /* slope i to j */
-    double zi;   /* z[i] */
-    int i;       /* point index */
-    int j;       /* point index */
-    int k;       /* h[j] */
+    double slope_ik;  /* slope i to k */
+    double max_slope; /* max slope value */
+    double max_point; /* point with max horizon */
+    double zi;        /* z[i] */
+    int i;            /* current point index */
+    int k;            /* search point index */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -99,57 +99,41 @@ int hor1f(
     * beginning.  For backward direction, loop runs from
     * next-to-beginning forward to end.
     */
-    for (i = n - 2; i >= 0; --i)
+    for (i = n - 1; i >= 0; --i)
     {
         zi = z[i];
 
-        /*
-        * Start with next-to-adjacent point in either forward or backward
-        * direction, depending on which way loop is running. Note that we
-        * don't consider the adjacent point; this seems to help reduce noise.
-        */
-        if ((k = i + 2) >= n)
-            --k;
-        /*
-        * loop until horizon found
-        */
+        /* assume the point is it's own horizon at first*/
+        max_slope = 0;
+        max_point = i;
 
-        do
+        /*
+        * Start with adjacent point in either forward or backward
+        * direction, depending on which way loop is running. Note,
+        * this differs from the original in that the original started
+        * with the next to adjacent point
+        */
+        for (k = i + 1; k <= n; k++)
         {
-            /*
-            * slopes from i to j and from j to its horizon
-            */
-
-            j = k;
-            k = h[j];
-            sij = SLOPEF(i, j, zi, z[j]);
-            sihj = SLOPEF(i, k, zi, z[k]);
 
             /*
-            * if slope(i,j) >= slope(i,h[j]), horizon has been found; otherwise
-            * set j to k (=h[j]) and loop again
+            * Slope from the current point to the kth point
             */
+            slope_ik = SLOPEF(i, k, zi, z[k]);
 
-        } while (sij < sihj);
+            /*
+            * Compare each kth point against the maximum slope
+            * already found. If it's slope is greater than the previous
+            * horizon, then it's found a new horizon
+            */
+            if (slope_ik > max_slope)
+            {
+                max_slope = slope_ik;
+                max_point = k;
+            }
+        }
 
-        /*
-        * if slope(i,j) > slope(j,h[j]), j is i's horizon; else if slope(i,j)
-        * is zero, i is its own horizon; otherwise slope(i,j) = slope(i,h[j])
-        * so h[j] is i's horizon
-        */
-
-        if (sij > sihj)
-        {
-            h[i] = j;
-        }
-        else if (sij == 0)
-        {
-            h[i] = i;
-        }
-        else
-        {
-            h[i] = k;
-        }
+        h[i] = max_point;
     }
     return (0);
 }
@@ -163,12 +147,12 @@ int hor1b(
     double *z, /* elevation function */
     int *h)    /* horizon function (return) */
 {
-    double sihj; /* slope i to h[j] */
-    double sij;  /* slope i to j */
-    double zi;   /* z[i] */
-    int i;       /* point index */
-    int j;       /* point index */
-    int k;       /* h[j] */
+    double slope_ik;  /* slope i to k */
+    double max_slope; /* max slope value */
+    double max_point; /* point with max horizon */
+    double zi;        /* z[i] */
+    int i;            /* current point index */
+    int k;            /* search point index */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -185,53 +169,37 @@ int hor1b(
     {
         zi = z[i];
 
-        /*
-        * Start with next-to-adjacent point in either forward or backward
-        * direction, depending on which way loop is running. Note that we
-        * don't consider the adjacent point; this seems to help reduce noise.
-        */
-        if ((k = i - 2) < 0)
-            ++k;
-        /*
-        * loop until horizon found
-        */
+        /* assume the point is it's own horizon at first*/
+        max_slope = 0;
+        max_point = i;
 
-        do
+        /*
+        * Start with adjacent point in either forward or backward
+        * direction, depending on which way loop is running. Note,
+        * this differs from the original in that the original started
+        * with the next to adjacent point
+        */
+        for (k = i - 1; k >= 0; k--)
         {
-            /*
-            * slopes from i to j and from j to its horizon
-            */
-
-            j = k;
-            k = h[j];
-            sij = SLOPEB(i, j, zi, z[j]);
-            sihj = SLOPEB(i, k, zi, z[k]);
 
             /*
-            * if slope(i,j) >= slope(i,h[j]), horizon has been found; otherwise
-            * set j to k (=h[j]) and loop again
+            * Slope from the current point to the kth point
             */
+            slope_ik = SLOPEB(i, k, zi, z[k]);
 
-        } while (sij < sihj);
+            /*
+            * Compare each kth point against the maximum slope
+            * already found. If it's slope is greater than the previous
+            * horizon, then it's found a new horizon
+            */
+            if (slope_ik > max_slope)
+            {
+                max_slope = slope_ik;
+                max_point = k;
+            }
+        }
 
-        /*
-        * if slope(i,j) > slope(j,h[j]), j is i's horizon; else if slope(i,j)
-        * is zero, i is its own horizon; otherwise slope(i,j) = slope(i,h[j])
-        * so h[j] is i's horizon
-        */
-
-        if (sij > sihj)
-        {
-            h[i] = j;
-        }
-        else if (sij == 0)
-        {
-            h[i] = i;
-        }
-        else
-        {
-            h[i] = k;
-        }
+        h[i] = max_point;
     }
     return (0);
 }

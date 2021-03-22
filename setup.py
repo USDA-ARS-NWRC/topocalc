@@ -36,8 +36,8 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
-              extra_compile_args=['-O3'],
-              extra_link_args=['-O3']
+              extra_compile_args=['-fopenmp', '-O3'],
+              extra_link_args=['-fopenmp', '-O3'],
               ),
 ]
 
