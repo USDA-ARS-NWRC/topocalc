@@ -165,3 +165,67 @@ def hor2d_c(z, spacing, fwd=True):
     #     h = np.fliplr(h)
 
     return h
+
+
+def pyhorizon(dem, dx):
+    """Pure python version of the horizon function.
+
+    NOTE: this is fast for small dem's but quite slow
+    for larger ones. This is mainly to show that it
+    can be done with numpy but requires a bit more to
+    remove the for loop over the rows. Also, this just
+    calculates the horizon in one direction, need to implement
+    the rest of the horizon function for calcuating the
+    horizon at an angle.
+
+    Args:
+        dem (np.ndarray): dem for the horizon
+        dx (float): spacing for the dem
+
+    Returns:
+        [tuple]: cosine of the horizon angle and index
+            to the horizon.
+    """
+
+    # needs to be a float
+    if dem.dtype != np.float64:
+        dem = dem.astype(np.float64)
+
+    nrows, ncols = dem.shape
+    hcos = np.zeros_like(dem)
+    horizon_index = np.zeros_like(dem)
+
+    # distance to each point
+    # k=-1 because the distance to the point itself is 0
+    distance = dx * np.cumsum(np.tri(ncols, ncols, k=-1), axis=0)
+    col_index = np.arange(0, ncols)
+
+    for n in range(nrows):
+        surface = dem[n, :]
+
+        m = np.repeat(surface.reshape(1, -1), ncols, axis=0)
+
+        # height change
+        height = np.tril(m.T - m)
+
+        # slope
+        slope = height / distance
+
+        # horizon location
+        hor = np.nanargmax(slope[:, :-1], axis=0)
+        hor = np.append(hor, ncols-1)
+        hidx = hor.astype(int)
+
+        horizon_height_diff = surface[hidx] - surface
+        horizon_distance_diff = dx * (hor - col_index)
+
+        new_horizon = horizon_height_diff / \
+            np.sqrt(horizon_height_diff**2 + horizon_distance_diff**2)
+
+        new_horizon[new_horizon < 0] = 0
+        new_horizon[np.isnan(new_horizon)] = 0
+
+        hcos[n, :] = new_horizon
+        horizon_index[n, :] = hidx
+
+    return hcos, horizon_index

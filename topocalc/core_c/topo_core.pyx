@@ -16,7 +16,6 @@ from libcpp cimport bool
 # _always_ do that, or you will have segfaults
 np.import_array()
 
-
 cdef extern from "topo_core.h":
     void hor1f(int n, double *z, int *h);
     void hor1b(int n, double *z, int *h);
@@ -97,3 +96,4 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
 
     # call the hor2d C function
     hor2d(nrows, ncols, &z_arr[0,0], spacing, fwd, &h[0,0], &hcos[0,0])
+

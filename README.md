@@ -12,7 +12,7 @@ The `topocalc` package is a collection of functions to calculate various metrics
 3. Sky view factor for percent of the sky that is visible from a point on the DEM
 
 - [topocalc](#topocalc)
-- [Backgourd](#backgourd)
+- [Background](#background)
   - [Azimuth convention](#azimuth-convention)
   - [Gradient for slope and aspect](#gradient-for-slope-and-aspect)
   - [Horizon angles](#horizon-angles)
@@ -43,7 +43,7 @@ The gradient is used to calculate the aspect from North (0 degrees). A conversio
 
 The horizon angle for a point on the DEM is the angle from zenith to the horizon for a given azimuth. Following the methods laid out in [Dozier and Frew, 1990](https://doi.org/10.1109/36.58986) and in [IPW `horizon`](https://github.com/USDA-ARS-NWRC/ipw/tree/main/src/bin/topocalc/horizon) the grid is rotated in the direction of the azimuth to make it a one dimensional problem.
 
-For two points `i` and `j`, we compare the slope from `i` and `j` with the slope of `j`'s horizon. If the slope is greater, then all points past `j` are not visible. If the slope is less, then all points between `i` and `j` don't need to be checked and the search can continue past point `j`. This search is performed in C to significantly speed up the computation.
+The horizon function will search the entire DEM profile for the horizon by finding the maximum slope along the profile. This search is performed in C to significantly speed up the computation.
 
 The values reported from `horizon` are cosine of the horizon angle.
 
