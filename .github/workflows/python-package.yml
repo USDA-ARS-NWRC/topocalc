@@ -10,13 +10,14 @@ on: [push]
   #   branches: [ $default-branch ]
 
 jobs:
-  build:
+  unittest:
 
-    runs-on: ubuntu-latest
     strategy:
       matrix:
+        os: [ubuntu-latest, macos-latest]
         python-version: [3.7]
         # python-version: [3.6, 3.7, 3.8, 3.9]
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
-        python3 -m pip install flake8 tox
+        python3 -m pip install flake8
         python3 -m pip install -r requirements.txt
     - name: Lint with flake8
       run: |
