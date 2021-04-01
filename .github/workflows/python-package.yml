@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7]
+        # python-version: [3.6, 3.7, 3.8, 3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -31,9 +32,11 @@ jobs:
     - name: Lint with flake8
       run: |
         flake8 topocalc
-    - name: Test with unittest
+    - name: Run unittests
+      env:
+        TOX_ENV: py${{ matrix.python-version}}
       run: |
-        python3 -m tox
+        tox -e $TOX_ENV
 
   # deploy-packages:
   #   if: startsWith(github.ref, 'refs/tags/v')
