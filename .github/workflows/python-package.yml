@@ -20,38 +20,39 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install flake8
-        python3 -m pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        flake8 topocalc
-    - name: Run unittests
-      run: |
-        python3 setup.py test
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install flake8
+          python3 -m pip install -r requirements.txt
+      - name: Lint with flake8
+        run: |
+          flake8 topocalc
+      - name: Run unittests
+        run: |
+          python3 setup.py test
 
   coverage:
     runs-on: ubuntu-latest
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.7
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install coverage coveralls PyYAML
-        python3 -m pip install -r requirements.txt
-    - name: Run coverage
-      run: |
-        make coveralls
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install coverage coveralls PyYAML
+          python3 -m pip install -r requirements.txt
+      - name: Run coverage
+        run: |
+          make coveralls
 
 
   # deploy-packages:
