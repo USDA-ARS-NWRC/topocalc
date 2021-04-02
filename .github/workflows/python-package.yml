@@ -35,6 +35,8 @@ jobs:
           flake8 topocalc
 
       - name: Run unittests
+        env:
+          CC: gcc
         run: |
           python3 setup.py test
 
