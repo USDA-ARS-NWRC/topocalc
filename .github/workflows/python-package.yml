@@ -71,7 +71,7 @@ jobs:
 
       - name: Run unittests
         env:
-          CC: gcc-7
+          CC: gcc-9
         run: |
           python3 setup.py test
 
