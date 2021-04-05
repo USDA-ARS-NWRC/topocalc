@@ -6,21 +6,17 @@ name: Unittest, flake8, coverage
 on: [push]
 # on: [pull-request]
 
-setup-python: &setup-python
-  name: Set up Python
-  uses: actions/setup-python@v2
-  with:
-    python-version: '3.7'
-
 jobs:
-
 
   flake8:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - *setup-python
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
           
       - name: Install dependencies
         run: |
