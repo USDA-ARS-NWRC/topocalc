@@ -37,25 +37,25 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
-              extra_compile_args=['-O3'],
-              extra_link_args=['-O3'],
+              #   extra_compile_args=['-O3'],
+              #   extra_link_args=['-O3'],
               ),
 ]
 
 setup(
-    author="Scott Havens",
-    author_email='scott.havens@ars.usda.gov',
-    python_requires='>=3.5',
+    author="USDA ARS NWRC",
+    author_email='snow@ars.usda.gov',
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9'
     ],
     description="Topo calculations like gradient and sky view",
     entry_points={

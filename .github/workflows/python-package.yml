@@ -49,7 +49,6 @@ jobs:
 
 
   unittest:
-
     needs: [flake8, coverage]
     strategy:
       matrix:
@@ -72,7 +71,7 @@ jobs:
 
       - name: Run unittests
         env:
-          CC: gcc-9
+          CC: gcc-7
         run: |
           python3 setup.py test
 
