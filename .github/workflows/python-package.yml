@@ -39,6 +39,8 @@ jobs:
         env:
           CC: gcc-9
         run: |
+          echo $CC
+          ${CC} --version
           python3 setup.py test
 
   # coverage:
