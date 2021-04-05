@@ -13,8 +13,8 @@ jobs:
       matrix:
         # os: [ubuntu-latest, macos-latest]
         os: [macos-latest]
-        # python-version: [3.7]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.7]
+        # python-version: [3.6, 3.7, 3.8, 3.9]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -39,6 +39,7 @@ jobs:
         env:
           CC: gcc
         run: |
+          gcc --version
           python3 setup.py test
 
   # coverage:

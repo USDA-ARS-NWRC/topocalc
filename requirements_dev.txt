@@ -3,7 +3,6 @@ netCDF4>=1.2.9
 wheel==0.33.6
 watchdog==0.9.0
 flake8==3.7.8
-tox==3.14.0
 coverage
 Sphinx==1.8.5
 twine==1.14.0
