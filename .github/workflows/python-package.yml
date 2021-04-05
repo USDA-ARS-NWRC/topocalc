@@ -12,9 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        # os: [macos-latest]
-        python-version: [3.7]
-        # python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -39,26 +37,24 @@ jobs:
         env:
           CC: gcc-9
         run: |
-          echo $CC
-          ${CC} --version
           python3 setup.py test
 
-  # coverage:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v2
-  #       with:
-  #         python-version: '3.7'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7'
           
-  #     - name: Install dependencies
-  #       run: |
-  #         python3 -m pip install --upgrade pip
-  #         python3 -m pip install coverage coveralls PyYAML
-  #         python3 -m pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install coverage coveralls PyYAML
+          python3 -m pip install -r requirements.txt
 
-  #     - name: Run coverage
-  #       run: |
-  #         make coveralls
+      - name: Run coverage
+        run: |
+          make coveralls

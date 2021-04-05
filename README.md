@@ -55,7 +55,7 @@ The sky view factor (`svf`) is the amount of the sky that is visible to a partic
 
 ## Installation
 
-> **NOTE**: `topocalc` has only been tested for Python 3.5 to 3.8 on Linux and MacOSX environments.
+> **NOTE**: `topocalc` has only been tested for Python 3.6 to 3.9 on Linux and MacOSX environments. If building from source, topocalc must be compiled with `gcc`, `clang` will not work if on MacOS.
 
 To install:
 
