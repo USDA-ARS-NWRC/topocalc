@@ -19,8 +19,9 @@ setup_requirements = ['setuptools_scm']
 
 test_requirements = []
 
-# force the compiler to use gcc
-os.environ["CC"] = "gcc"
+# Give user option to specify their local compiler name
+if "CC" not in os.environ:
+    os.environ["CC"] = "gcc"
 
 cmdclass = {'build_ext': build_ext}
 ext_modules = []
