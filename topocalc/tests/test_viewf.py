@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
+from sys import platform
 
 import numpy as np
 
@@ -19,10 +20,19 @@ class TestViewf(unittest.TestCase):
         svf, tvf = viewf(dem, spacing=10, nangles=360)
 
         # The top should all be ones with 100% sky view
-        np.testing.assert_equal(
-            svf[:, :24],
-            np.ones_like(svf[:, :24])
-        )
+        # OSX seems to have some difficulty with the edge
+        # where linux does not. It is close to 1 but not quite
+        if platform == 'darwin':
+            np.testing.assert_allclose(
+                svf[:, :24],
+                np.ones_like(svf[:, :24]),
+                atol=1e-3
+            )
+        else:
+            np.testing.assert_array_equal(
+                svf[:, :24],
+                np.ones_like(svf[:, :24])
+            )
 
         # The edge should be 50% or 0.5 svf
         np.testing.assert_allclose(
