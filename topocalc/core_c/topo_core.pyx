@@ -79,13 +79,10 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
         hcos: cosine angle of horizon array changed in place
     """
 
-    cdef int nrows
-    cdef int ncols
-    nrows = z.shape[0]
-    ncols = z.shape[1]
+    cdef int nrows = z.shape[0]
+    cdef int ncols = z.shape[1]
 
-    cdef bool fwd
-    fwd = forward
+    cdef bool fwd = forward
     
     # convert the z array to C
     cdef np.ndarray[double, mode="c", ndim=2] z_arr
