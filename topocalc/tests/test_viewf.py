@@ -26,7 +26,7 @@ class TestViewf(unittest.TestCase):
             np.testing.assert_allclose(
                 svf[:, :24],
                 np.ones_like(svf[:, :24]),
-                atol=1e-3
+                atol=1e-2
             )
         else:
             np.testing.assert_array_equal(
