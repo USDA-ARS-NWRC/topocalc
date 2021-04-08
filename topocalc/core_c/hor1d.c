@@ -5,14 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <stdio.h>
 #include "topo_core.h"
-
-#define SLOPEF(i, j, zi, zj) \
-    (((zj) <= (zi)) ? 0 : ((zj) - (zi)) / ((float)((j) - (i))))
-
-#define SLOPEB(i, j, zi, zj) \
-    (((zj) <= (zi)) ? 0 : ((zj) - (zi)) / ((float)((i) - (j))))
 
 void hor2d(
     int nrows,    /* rows of elevations array */
@@ -119,7 +112,11 @@ int hor1f(
             /*
             * Slope from the current point to the kth point
             */
-            slope_ik = SLOPEF(i, k, zi, z[k]);
+            slope_ik = 0;
+            if (z[k] > zi)
+            {
+                slope_ik = (z[k] - zi) / ((float)(k - i));
+            }
 
             /*
             * Compare each kth point against the maximum slope
@@ -185,7 +182,11 @@ int hor1b(
             /*
             * Slope from the current point to the kth point
             */
-            slope_ik = SLOPEB(i, k, zi, z[k]);
+            slope_ik = 0;
+            if (z[k] > zi)
+            {
+                slope_ik = (z[k] - zi) / ((float)(i - k));
+            }
 
             /*
             * Compare each kth point against the maximum slope
