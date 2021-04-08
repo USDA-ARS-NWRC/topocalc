@@ -3776,9 +3776,9 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "topocalc/core_c/topo_core.pyx":1
- * # setuptools: language=3             # <<<<<<<<<<<<<<
- * # cython: embedsignature=True
- * 
+ * # cython: embedsignature=True             # <<<<<<<<<<<<<<
+ * # distutils: language=3
+ * """
  */
   __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);

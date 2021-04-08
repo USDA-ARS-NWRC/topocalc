@@ -1,9 +1,9 @@
-# setuptools: language=3
 # cython: embedsignature=True
-
+# distutils: language=3
 """
 C implementation of some radiation functions
 """
+
 
 import cython
 import numpy as np

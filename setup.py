@@ -27,9 +27,6 @@ class build_ext(_build_ext):
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
-# with open('HISTORY.md') as history_file:
-#     history = history_file.read()
-
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
 
@@ -55,6 +52,7 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
+              #   define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')],
               #   extra_compile_args=['-O3'],
               #   extra_link_args=['-O3'],
               ),
