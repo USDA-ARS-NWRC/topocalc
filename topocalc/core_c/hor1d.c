@@ -80,6 +80,7 @@ int hor1f(
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */
+    double dist;      /* difference between i and k */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -115,7 +116,8 @@ int hor1f(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                slope_ik = (z[k] - zi) / ((float)(k - i));
+                dist = (double)k - i;
+                slope_ik = (z[k] - zi) / dist;
             }
 
             /*
@@ -150,6 +152,7 @@ int hor1b(
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */
+    double dist;      /* difference between i and k */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -185,7 +188,8 @@ int hor1b(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                slope_ik = (z[k] - zi) / ((float)(i - k));
+                dist = (double)i - k;
+                slope_ik = (z[k] - zi) / dist;
             }
 
             /*
