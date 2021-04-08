@@ -16,7 +16,7 @@ class TestViewf(unittest.TestCase):
         dem = np.ones((50, 50))
         dem[:, :25] = 100000
 
-        svf, tvf = viewf(dem, spacing=10)
+        svf, tvf = viewf(dem, spacing=10, nangles=360)
 
         # The top should all be ones with 100% sky view
         np.testing.assert_equal(
