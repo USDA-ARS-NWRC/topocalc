@@ -4,7 +4,6 @@ import os
 
 import numpy
 from setuptools import Extension, find_packages, setup
-
 from setuptools.command.build_ext import build_ext as _build_ext
 
 # Test if compiling with cython or using the C source
@@ -51,10 +50,7 @@ ext_modules += [
                   "topo_core.pyx",
                   "hor1d.c",
               ]],
-              include_dirs=[numpy.get_include()],
-              #   define_macros=[('NPY_NO_DEPRECATED_API', 'NPY_1_7_API_VERSION')],
-              #   extra_compile_args=['-O3'],
-              #   extra_link_args=['-O3'],
+              include_dirs=[numpy.get_include()]
               ),
 ]
 
@@ -84,9 +80,6 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    # package_data={
-    #     'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
-    # },
     keywords='topocalc',
     name='topocalc',
     packages=find_packages(include=['topocalc', 'topocalc.*']),
@@ -96,7 +89,6 @@ setup(
     cmdclass=cmdclass,
     ext_modules=ext_modules,
     url='https://github.com/USDA-ARS-NWRC/topocalc',
-    # version='0.1.0',
     use_scm_version={
         "local_scheme": "no-local-version"
     },

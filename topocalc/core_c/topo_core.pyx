@@ -10,7 +10,7 @@ import numpy as np
 cimport numpy as np
 import ctypes
 # from cpython cimport bool
-from libcpp cimport bool
+# from libcpp cimport bool
 
 
 # Numpy must be initialized. When using numpy from C or Cython you must
@@ -21,14 +21,14 @@ cdef extern from "topo_core.h":
     void hor1f(int n, double *z, int *h);
     void hor1b(int n, double *z, int *h);
     void horval(int n, double *z, double delta, int *h, double *hcos);
-    void hor2d(int n, int m, double *z, double delta, bool forward, int *h, double *hcos);
+    void hor2d(int n, int m, double *z, double delta, bint forward, int *h, double *hcos);
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
 # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
 def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,
            double spacing,
-           bool forward,
+           bint forward,
            np.ndarray[double, mode="c", ndim=1] hcos):
     """
     Call the function hor1f in hor1f.c
@@ -67,7 +67,7 @@ def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,
 # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
 def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
            double spacing,
-           bool forward,
+           bint forward,
            np.ndarray[double, mode="c", ndim=2] hcos):
     """
     Call the function hor1f in hor1f.c
@@ -83,7 +83,7 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
     cdef int nrows = z.shape[0]
     cdef int ncols = z.shape[1]
 
-    cdef bool fwd = forward
+    cdef bint fwd = forward
     
     # convert the z array to C
     cdef np.ndarray[double, mode="c", ndim=2] z_arr
