@@ -3,8 +3,26 @@
 import os
 
 import numpy
-from Cython.Distutils import build_ext
 from setuptools import Extension, find_packages, setup
+
+from setuptools.command.build_ext import build_ext as _build_ext
+
+# Test if compiling with cython or using the C source
+try:
+    from Cython.Distutils import build_ext as _build_ext
+except ImportError:
+    USE_CYTHON = False
+else:
+    USE_CYTHON = True
+
+print('Using Cython {}'.format(USE_CYTHON))
+ext = '.pyx' if USE_CYTHON else '.c'
+
+
+class build_ext(_build_ext):
+    def finalize_options(self):
+        _build_ext.finalize_options(self)
+
 
 with open('README.md') as readme_file:
     readme = readme_file.read()
@@ -39,7 +57,6 @@ ext_modules += [
               include_dirs=[numpy.get_include()],
               #   extra_compile_args=['-O3'],
               #   extra_link_args=['-O3'],
-              directives={'linetrace': False, 'language_level': 3}
               ),
 ]
 

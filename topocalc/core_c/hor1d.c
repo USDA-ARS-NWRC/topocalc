@@ -109,7 +109,6 @@ int hor1f(
         */
         for (k = i + 1; k <= n; k++)
         {
-
             /*
             * Slope from the current point to the kth point
             */
