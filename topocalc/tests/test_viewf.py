@@ -19,9 +19,9 @@ class TestViewf(unittest.TestCase):
         svf, tvf = viewf(dem, spacing=10)
 
         # The top should all be ones with 100% sky view
-        self.assertTrue(
-            np.array_equal(svf[:, :24],
-                           np.ones_like(svf[:, :24]))
+        np.testing.assert_equal(
+            svf[:, :24],
+            np.ones_like(svf[:, :24])
         )
 
         # The edge should be 50% or 0.5 svf
@@ -39,7 +39,8 @@ class TestViewf(unittest.TestCase):
     def test_viewf_errors_angles(self):
         """Test viewf nangles errors"""
 
-        self.assertRaises(ValueError, viewf, np.ones((10, 1)), 10, nangles=10)
+        self.assertRaises(ValueError, viewf, np.ones(
+            (10, 1)), 10, nangles=10)
 
     def test_viewf_errors_sin_slope(self):
         """Test viewf sin_slope errors"""
