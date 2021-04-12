@@ -115,7 +115,7 @@ int hor1f(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                dist = (double)k - i;
+                dist = (double)k - (double)i;
                 slope_ik = (z[k] - zi) / dist;
             }
 
@@ -187,7 +187,7 @@ int hor1b(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                dist = (double)i - k;
+                dist = (double)i - (double)k;
                 slope_ik = (z[k] - zi) / dist;
             }
 
