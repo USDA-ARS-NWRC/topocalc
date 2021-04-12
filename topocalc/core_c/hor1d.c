@@ -222,7 +222,7 @@ void horval(
     int *h,       /* horizon function */
     double *hcos) /* cosines of angles to horizon */
 {
-    int d;       /* difference in indices */
+    double d;    /* difference in indices */
     int i;       /* index of point */
     int j;       /* index of horizon point */
     double diff; /* elevation difference */
@@ -232,7 +232,7 @@ void horval(
 
         /* # grid points to horizon */
         j = h[i];
-        d = j - i;
+        d = (double)(j - i);
 
         /* point is its own horizon */
         if (d == 0)
