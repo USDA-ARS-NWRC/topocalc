@@ -76,7 +76,7 @@ int hor1f(
 {
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
-    double max_point; /* point with max horizon */
+    int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */
@@ -147,7 +147,7 @@ int hor1b(
 {
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
-    double max_point; /* point with max horizon */
+    int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import unittest
-from sys import platform
+# from sys import platform
 
 import numpy as np
 
@@ -22,32 +22,32 @@ class TestViewf(unittest.TestCase):
         # The top should all be ones with 100% sky view
         # OSX seems to have some difficulty with the edge
         # where linux does not. It is close to 1 but not quite
-        if platform == 'darwin':
-            np.testing.assert_allclose(
-                svf[:, :24],
-                np.ones_like(svf[:, :24]),
-                atol=1e-2
-            )
+        # if platform == 'darwin':
+        #     np.testing.assert_allclose(
+        #         svf[:, :24],
+        #         np.ones_like(svf[:, :24]),
+        #         atol=1e-2
+        #     )
 
-            # The edge should be 50% or 0.5 svf
-            np.testing.assert_allclose(
-                svf[:, 25],
-                0.5 * np.ones_like(svf[:, 25]),
-                atol=1e-2
-            )
+        #     # The edge should be 50% or 0.5 svf
+        #     np.testing.assert_allclose(
+        #         svf[:, 25],
+        #         0.5 * np.ones_like(svf[:, 25]),
+        #         atol=1e-2
+        #     )
 
-        else:
-            np.testing.assert_array_equal(
-                svf[:, :24],
-                np.ones_like(svf[:, :24])
-            )
+        # else:
+        np.testing.assert_array_equal(
+            svf[:, :24],
+            np.ones_like(svf[:, :24])
+        )
 
-            # The edge should be 50% or 0.5 svf
-            np.testing.assert_allclose(
-                svf[:, 25],
-                0.5 * np.ones_like(svf[:, 25]),
-                atol=1e-3
-            )
+        # The edge should be 50% or 0.5 svf
+        np.testing.assert_allclose(
+            svf[:, 25],
+            0.5 * np.ones_like(svf[:, 25]),
+            atol=1e-3
+        )
 
     def test_viewf_errors_dem(self):
         """Test viewf dem errors"""

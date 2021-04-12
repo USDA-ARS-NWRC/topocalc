@@ -1680,7 +1680,7 @@ static PyObject *__pyx_n_s_topocalc_core_c_topo_core;
 static PyObject *__pyx_kp_s_topocalc_core_c_topo_core_pyx;
 static PyObject *__pyx_n_s_z;
 static PyObject *__pyx_n_s_z_arr;
-static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_z, double __pyx_v_spacing, PyObject *__pyx_v_forward, PyArrayObject *__pyx_v_hcos); /* proto */
+static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_z, double __pyx_v_spacing, int __pyx_v_forward, PyArrayObject *__pyx_v_hcos); /* proto */
 static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_2c_hor2d(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_z, double __pyx_v_spacing, int __pyx_v_forward, PyArrayObject *__pyx_v_hcos); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
@@ -1695,17 +1695,17 @@ static PyObject *__pyx_codeobj__6;
  * # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
  * def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,             # <<<<<<<<<<<<<<
  *            double spacing,
- *            forward,
+ *            bint forward,
  */
 
 /* Python wrapper */
 static PyObject *__pyx_pw_8topocalc_6core_c_9topo_core_1c_hor1d(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_8topocalc_6core_c_9topo_core_c_hor1d[] = "c_hor1d(ndarray z, double spacing, forward, ndarray hcos)\n\n    Call the function hor1f in hor1f.c\n\n    https://stackoverflow.com/questions/23435756/passing-numpy-integer-array-to-c-code\n\n    Args:\n        z: elevation array\n        spacing: grid spacing\n    \n    Returns\n        hcos: cosine angle of horizon array changed in place\n    ";
+static char __pyx_doc_8topocalc_6core_c_9topo_core_c_hor1d[] = "c_hor1d(ndarray z, double spacing, bool forward, ndarray hcos)\n\n    Call the function hor1f in hor1f.c\n\n    https://stackoverflow.com/questions/23435756/passing-numpy-integer-array-to-c-code\n\n    Args:\n        z: elevation array\n        spacing: grid spacing\n    \n    Returns\n        hcos: cosine angle of horizon array changed in place\n    ";
 static PyMethodDef __pyx_mdef_8topocalc_6core_c_9topo_core_1c_hor1d = {"c_hor1d", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_8topocalc_6core_c_9topo_core_1c_hor1d, METH_VARARGS|METH_KEYWORDS, __pyx_doc_8topocalc_6core_c_9topo_core_c_hor1d};
 static PyObject *__pyx_pw_8topocalc_6core_c_9topo_core_1c_hor1d(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyArrayObject *__pyx_v_z = 0;
   double __pyx_v_spacing;
-  PyObject *__pyx_v_forward = 0;
+  int __pyx_v_forward;
   PyArrayObject *__pyx_v_hcos = 0;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -1768,7 +1768,7 @@ static PyObject *__pyx_pw_8topocalc_6core_c_9topo_core_1c_hor1d(PyObject *__pyx_
     }
     __pyx_v_z = ((PyArrayObject *)values[0]);
     __pyx_v_spacing = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_spacing == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
-    __pyx_v_forward = values[2];
+    __pyx_v_forward = __Pyx_PyObject_IsTrue(values[2]); if (unlikely((__pyx_v_forward == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 31, __pyx_L3_error)
     __pyx_v_hcos = ((PyArrayObject *)values[3]);
   }
   goto __pyx_L4_argument_unpacking_done;
@@ -1792,7 +1792,7 @@ static PyObject *__pyx_pw_8topocalc_6core_c_9topo_core_1c_hor1d(PyObject *__pyx_
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_z, double __pyx_v_spacing, PyObject *__pyx_v_forward, PyArrayObject *__pyx_v_hcos) {
+static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_z, double __pyx_v_spacing, int __pyx_v_forward, PyArrayObject *__pyx_v_hcos) {
   int __pyx_v_n;
   PyArrayObject *__pyx_v_z_arr = 0;
   PyArrayObject *__pyx_v_h = 0;
@@ -1974,7 +1974,7 @@ static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyO
  *         hor1f(n, &z_arr[0], &h[0])
  *     else:
  */
-  __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_v_forward); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_t_12 = (__pyx_v_forward != 0);
   if (__pyx_t_12) {
 
     /* "topocalc/core_c/topo_core.pyx":58
@@ -2029,7 +2029,7 @@ static PyObject *__pyx_pf_8topocalc_6core_c_9topo_core_c_hor1d(CYTHON_UNUSED PyO
  * # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
  * def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,             # <<<<<<<<<<<<<<
  *            double spacing,
- *            forward,
+ *            bint forward,
  */
 
   /* function exit code */
@@ -3385,7 +3385,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
  * def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,             # <<<<<<<<<<<<<<
  *            double spacing,
- *            forward,
+ *            bint forward,
  */
   __pyx_tuple__3 = PyTuple_Pack(7, __pyx_n_s_z, __pyx_n_s_spacing, __pyx_n_s_forward, __pyx_n_s_hcos, __pyx_n_s_n, __pyx_n_s_z_arr, __pyx_n_s_h); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
@@ -3754,7 +3754,7 @@ if (!__Pyx_RefNanny) {
  * # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
  * def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,             # <<<<<<<<<<<<<<
  *            double spacing,
- *            forward,
+ *            bint forward,
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_8topocalc_6core_c_9topo_core_1c_hor1d, NULL, __pyx_n_s_topocalc_core_c_topo_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
