@@ -97,7 +97,7 @@ int hor1f(
         zi = z[i];
 
         /* assume the point is it's own horizon at first*/
-        max_slope = 0;
+        max_slope = 0.0;
         max_point = i;
 
         /*
@@ -111,7 +111,7 @@ int hor1f(
             /*
             * Slope from the current point to the kth point
             */
-            slope_ik = 0;
+            slope_ik = 0.0;
             if (z[k] > zi)
             {
                 dist = (double)(k - i);
@@ -168,7 +168,7 @@ int hor1b(
         zi = z[i];
 
         /* assume the point is it's own horizon at first*/
-        max_slope = 0;
+        max_slope = 0.0;
         max_point = i;
 
         /*
@@ -183,7 +183,7 @@ int hor1b(
             /*
             * Slope from the current point to the kth point
             */
-            slope_ik = 0;
+            slope_ik = 0.0;
             if (z[k] > zi)
             {
                 dist = (double)(i - k);
@@ -240,14 +240,13 @@ void horval(
             hcos[i] = 0;
         }
 
-        /* else need to calculate sine */
+        /* else need to calculate cosine */
         else
         {
             if (d < 0)
                 d = -d;
             diff = z[j] - z[i];
-            // hcos[i] = diff / (double)hypot(diff, d * delta);
-            hcos[i] = diff / sqrt(diff * diff + d * d * delta * delta);
+            hcos[i] = diff / (double)hypot(diff, d * delta);
         }
     }
 }
