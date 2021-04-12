@@ -21,7 +21,7 @@ cdef extern from "topo_core.h":
     void hor1f(int n, double *z, int *h);
     void hor1b(int n, double *z, int *h);
     void horval(int n, double *z, double delta, int *h, double *hcos);
-    void hor2d(int n, int m, double *z, double delta, bint forward, int *h, double *hcos);
+    void hor2d(int n, int m, double *z, double delta, bint forward, double *hcos);
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -82,6 +82,7 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
 
     cdef int nrows = z.shape[0]
     cdef int ncols = z.shape[1]
+    cdef double cspacing = spacing
 
     cdef bint fwd = forward
     
@@ -89,9 +90,6 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
     cdef np.ndarray[double, mode="c", ndim=2] z_arr
     z_arr = np.ascontiguousarray(z, dtype=np.float64)
 
-    # integer array for horizon index
-    cdef np.ndarray[int, ndim=2, mode='c'] h = np.empty((nrows,ncols), dtype = ctypes.c_int)
-
     # call the hor2d C function
-    hor2d(nrows, ncols, &z_arr[0,0], spacing, fwd, &h[0,0], &hcos[0,0])
+    hor2d(nrows, ncols, &z_arr[0,0], cspacing, fwd, &hcos[0,0])
 

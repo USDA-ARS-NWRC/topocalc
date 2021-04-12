@@ -13,7 +13,6 @@ void hor2d(
     double *z,    /* elevations */
     double delta, /* spacing */
     bool forward, /* forward function */
-    int *h,       /* horizon function */
     double *hcos) /* cosines of angles to horizon */
 {
     int i, j; /* loop index */
@@ -115,7 +114,7 @@ int hor1f(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                dist = (double)k - (double)i;
+                dist = (double)(k - i);
                 slope_ik = (z[k] - zi) / dist;
             }
 
@@ -187,7 +186,7 @@ int hor1b(
             slope_ik = 0;
             if (z[k] > zi)
             {
-                dist = (double)i - (double)k;
+                dist = (double)(i - k);
                 slope_ik = (z[k] - zi) / dist;
             }
 
