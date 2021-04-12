@@ -237,7 +237,7 @@ void horval(
         /* point is its own horizon */
         if (d == 0)
         {
-            *hcos++ = 0;
+            hcos[i] = 0;
         }
 
         /* else need to calculate sine */
@@ -246,7 +246,8 @@ void horval(
             if (d < 0)
                 d = -d;
             diff = z[j] - z[i];
-            *hcos++ = diff / (double)hypot(diff, d * delta);
+            // hcos[i] = diff / (double)hypot(diff, d * delta);
+            hcos[i] = diff / sqrt(diff * diff + d * d * delta * delta);
         }
     }
 }
