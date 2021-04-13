@@ -109,24 +109,24 @@ int hor1f(
         for (k = i + 1; k <= n; k++)
         {
             /*
-            * Slope from the current point to the kth point
+            * Only look at points higher than the starting point
             */
-            slope_ik = 0.0;
+
             if (z[k] > zi)
             {
                 dist = (double)(k - i);
                 slope_ik = (z[k] - zi) / dist;
-            }
 
-            /*
-            * Compare each kth point against the maximum slope
-            * already found. If it's slope is greater than the previous
-            * horizon, then it's found a new horizon
-            */
-            if (slope_ik > max_slope)
-            {
-                max_slope = slope_ik;
-                max_point = k;
+                /*
+                * Compare each kth point against the maximum slope
+                * already found. If it's slope is greater than the previous
+                * horizon, then it's found a new horizon
+                */
+                if (slope_ik > max_slope)
+                {
+                    max_slope = slope_ik;
+                    max_point = k;
+                }
             }
         }
 
@@ -181,24 +181,23 @@ int hor1b(
         {
 
             /*
-            * Slope from the current point to the kth point
+            * Only look at points higher than the starting point
             */
-            slope_ik = 0.0;
             if (z[k] > zi)
             {
                 dist = (double)(i - k);
                 slope_ik = (z[k] - zi) / dist;
-            }
 
-            /*
-            * Compare each kth point against the maximum slope
-            * already found. If it's slope is greater than the previous
-            * horizon, then it's found a new horizon
-            */
-            if (slope_ik > max_slope)
-            {
-                max_slope = slope_ik;
-                max_point = k;
+                /*
+                * Compare each kth point against the maximum slope
+                * already found. If it's slope is greater than the previous
+                * horizon, then it's found a new horizon
+                */
+                if (slope_ik > max_slope)
+                {
+                    max_slope = slope_ik;
+                    max_point = k;
+                }
             }
         }
 
