@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include "topo_core.h"
 
 void hor2d(
@@ -29,6 +30,7 @@ void hor2d(
     double *zbuf;
     zbuf = (double *)calloc(ncols, sizeof(double));
 
+    printf("%f\n", delta);
     /*
      * main loop, read in full line at a time
      */
@@ -130,6 +132,7 @@ int hor1f(
             }
         }
 
+        printf("%i - ", max_point);
         h[i] = max_point;
     }
     return (0);
