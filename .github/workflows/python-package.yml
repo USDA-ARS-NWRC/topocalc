@@ -55,6 +55,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         # os: [macos-latest]
         python-version: [3.6, 3.7, 3.8, 3.9]
+        # python-version: [3.8]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -74,7 +75,7 @@ jobs:
         # env:
           # CC: gcc-9
         run: |
-          python3 setup.py test
+           python3 setup.py test -s topocalc.tests.test_horizon
 
   build_wheels:
     needs: unittest
