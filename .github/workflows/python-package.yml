@@ -3,9 +3,13 @@
 
 name: Unittest, flake8, coverage
 
+# Run action on pull requests
+# Run on a published release and push to Pypi
 on:
   pull_request:
     branches: [ main ]
+  release: 
+    types: [published]
 
 jobs:
 
@@ -133,9 +137,9 @@ jobs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # upload to PyPI on every tag starting with 'v'
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    # if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     # alternatively, to publish when a GitHub Release is created, use the following rule:
-    # if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release' && github.event.action == 'published'
     steps:
       - uses: actions/download-artifact@v2
         with:
