@@ -1,4 +1,5 @@
 # cython: embedsignature=True
+# distutils: language=3
 """
 C implementation of some radiation functions
 """
@@ -9,7 +10,7 @@ import numpy as np
 cimport numpy as np
 import ctypes
 # from cpython cimport bool
-from libcpp cimport bool
+# from libcpp cimport bool
 
 
 # Numpy must be initialized. When using numpy from C or Cython you must
@@ -20,14 +21,14 @@ cdef extern from "topo_core.h":
     void hor1f(int n, double *z, int *h);
     void hor1b(int n, double *z, int *h);
     void horval(int n, double *z, double delta, int *h, double *hcos);
-    void hor2d(int n, int m, double *z, double delta, bool forward, int *h, double *hcos);
+    void hor2d(int n, int m, double *z, double delta, bint forward, double *hcos);
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
 # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
 def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,
            double spacing,
-           bool forward,
+           bint forward,
            np.ndarray[double, mode="c", ndim=1] hcos):
     """
     Call the function hor1f in hor1f.c
@@ -66,7 +67,7 @@ def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,
 # https://github.com/cython/cython/wiki/tutorials-NumpyPointerToC
 def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
            double spacing,
-           bool forward,
+           bint forward,
            np.ndarray[double, mode="c", ndim=2] hcos):
     """
     Call the function hor1f in hor1f.c
@@ -79,21 +80,16 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
         hcos: cosine angle of horizon array changed in place
     """
 
-    cdef int nrows
-    cdef int ncols
-    nrows = z.shape[0]
-    ncols = z.shape[1]
+    cdef int nrows = z.shape[0]
+    cdef int ncols = z.shape[1]
+    cdef double cspacing = spacing
 
-    cdef bool fwd
-    fwd = forward
+    cdef bint fwd = forward
     
     # convert the z array to C
     cdef np.ndarray[double, mode="c", ndim=2] z_arr
     z_arr = np.ascontiguousarray(z, dtype=np.float64)
 
-    # integer array for horizon index
-    cdef np.ndarray[int, ndim=2, mode='c'] h = np.empty((nrows,ncols), dtype = ctypes.c_int)
-
     # call the hor2d C function
-    hor2d(nrows, ncols, &z_arr[0,0], spacing, fwd, &h[0,0], &hcos[0,0])
+    hor2d(nrows, ncols, &z_arr[0,0], cspacing, fwd, &hcos[0,0])
 
