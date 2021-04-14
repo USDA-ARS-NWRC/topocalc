@@ -30,7 +30,7 @@ void hor2d(
     double *zbuf;
     zbuf = (double *)calloc(ncols, sizeof(double));
 
-    printf("%f\n", delta);
+    printf("%f - %i\n", delta, ncols);
     /*
      * main loop, read in full line at a time
      */
@@ -94,7 +94,7 @@ int hor1f(
     * beginning.  For backward direction, loop runs from
     * next-to-beginning forward to end.
     */
-    for (i = n - 1; i >= 0; --i)
+    for (i = n - 2; i >= 0; --i)
     {
         zi = z[i];
 
@@ -109,7 +109,7 @@ int hor1f(
         * this differs from the original in that the original started
         * with the next to adjacent point
         */
-        for (k = i + 1; k <= n; k++)
+        for (k = i + 1; k < n; k++)
         {
             /*
             * Only look at points higher than the starting point
