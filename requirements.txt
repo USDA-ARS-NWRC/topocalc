@@ -1,5 +1,4 @@
 numpy>=1.15
 Click>=7.0
-Cython>=0.28.4
 spatialnc>=0.2.12
 setuptools_scm<4.2

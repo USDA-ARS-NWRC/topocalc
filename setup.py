@@ -3,14 +3,28 @@
 import os
 
 import numpy
-from Cython.Distutils import build_ext
 from setuptools import Extension, find_packages, setup
+from setuptools.command.build_ext import build_ext as _build_ext
+
+# Test if compiling with cython or using the C source
+try:
+    from Cython.Distutils import build_ext as _build_ext
+except ImportError:
+    USE_CYTHON = False
+else:
+    USE_CYTHON = True
+
+print('Using Cython {}'.format(USE_CYTHON))
+ext = '.pyx' if USE_CYTHON else '.c'
+
+
+class build_ext(_build_ext):
+    def finalize_options(self):
+        _build_ext.finalize_options(self)
+
 
 with open('README.md') as readme_file:
     readme = readme_file.read()
-
-# with open('HISTORY.md') as history_file:
-#     history = history_file.read()
 
 with open('requirements.txt') as requirements_file:
     requirements = requirements_file.read()
@@ -19,8 +33,9 @@ setup_requirements = ['setuptools_scm']
 
 test_requirements = []
 
-# force the compiler to use gcc
-os.environ["CC"] = "gcc"
+# Give user option to specify their local compiler name
+if "CC" not in os.environ:
+    os.environ["CC"] = "gcc"
 
 cmdclass = {'build_ext': build_ext}
 ext_modules = []
@@ -36,25 +51,23 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
-              extra_compile_args=['-O3'],
-              extra_link_args=['-O3'],
               ),
 ]
 
 setup(
-    author="Scott Havens",
-    author_email='scott.havens@ars.usda.gov',
-    python_requires='>=3.5',
+    author="USDA ARS NWRC",
+    author_email='snow@ars.usda.gov',
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9'
     ],
     description="Topo calculations like gradient and sky view",
     entry_points={
@@ -67,9 +80,6 @@ setup(
     long_description=readme,
     long_description_content_type="text/markdown",
     include_package_data=True,
-    # package_data={
-    #     'topocalc': ['*.pyx', '*.pxd', '*.c', '*.h'],
-    # },
     keywords='topocalc',
     name='topocalc',
     packages=find_packages(include=['topocalc', 'topocalc.*']),
@@ -79,7 +89,6 @@ setup(
     cmdclass=cmdclass,
     ext_modules=ext_modules,
     url='https://github.com/USDA-ARS-NWRC/topocalc',
-    # version='0.1.0',
     use_scm_version={
         "local_scheme": "no-local-version"
     },

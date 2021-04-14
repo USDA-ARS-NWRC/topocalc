@@ -159,6 +159,7 @@ def hor2d_c(z, spacing, fwd=True):
     z = np.ascontiguousarray(z)
 
     h = np.zeros_like(z)
+
     topo_core.c_hor2d(z, spacing, fwd, h)
 
     # if not fwd:

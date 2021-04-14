@@ -8,19 +8,12 @@
 #include <stdio.h>
 #include "topo_core.h"
 
-#define SLOPEF(i, j, zi, zj) \
-    (((zj) <= (zi)) ? 0 : ((zj) - (zi)) / ((float)((j) - (i))))
-
-#define SLOPEB(i, j, zi, zj) \
-    (((zj) <= (zi)) ? 0 : ((zj) - (zi)) / ((float)((i) - (j))))
-
 void hor2d(
     int nrows,    /* rows of elevations array */
     int ncols,    /* columns of elevations array */
     double *z,    /* elevations */
     double delta, /* spacing */
     bool forward, /* forward function */
-    int *h,       /* horizon function */
     double *hcos) /* cosines of angles to horizon */
 {
     int i, j; /* loop index */
@@ -83,10 +76,11 @@ int hor1f(
 {
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
-    double max_point; /* point with max horizon */
+    int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */
+    double dist;      /* difference between i and k */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -99,12 +93,12 @@ int hor1f(
     * beginning.  For backward direction, loop runs from
     * next-to-beginning forward to end.
     */
-    for (i = n - 1; i >= 0; --i)
+    for (i = n - 2; i >= 0; --i)
     {
         zi = z[i];
 
         /* assume the point is it's own horizon at first*/
-        max_slope = 0;
+        max_slope = 0.0;
         max_point = i;
 
         /*
@@ -113,23 +107,27 @@ int hor1f(
         * this differs from the original in that the original started
         * with the next to adjacent point
         */
-        for (k = i + 1; k <= n; k++)
+        for (k = i + 1; k < n; k++)
         {
-
             /*
-            * Slope from the current point to the kth point
+            * Only look at points higher than the starting point
             */
-            slope_ik = SLOPEF(i, k, zi, z[k]);
 
-            /*
-            * Compare each kth point against the maximum slope
-            * already found. If it's slope is greater than the previous
-            * horizon, then it's found a new horizon
-            */
-            if (slope_ik > max_slope)
+            if (z[k] > zi)
             {
-                max_slope = slope_ik;
-                max_point = k;
+                dist = (double)(k - i);
+                slope_ik = (z[k] - zi) / dist;
+
+                /*
+                * Compare each kth point against the maximum slope
+                * already found. If it's slope is greater than the previous
+                * horizon, then it's found a new horizon
+                */
+                if (slope_ik > max_slope)
+                {
+                    max_slope = slope_ik;
+                    max_point = k;
+                }
             }
         }
 
@@ -149,10 +147,11 @@ int hor1b(
 {
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
-    double max_point; /* point with max horizon */
+    int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
     int i;            /* current point index */
     int k;            /* search point index */
+    double dist;      /* difference between i and k */
 
     /*
     * end point is its own horizon in forward direction; first point is
@@ -170,7 +169,7 @@ int hor1b(
         zi = z[i];
 
         /* assume the point is it's own horizon at first*/
-        max_slope = 0;
+        max_slope = 0.0;
         max_point = i;
 
         /*
@@ -183,19 +182,23 @@ int hor1b(
         {
 
             /*
-            * Slope from the current point to the kth point
+            * Only look at points higher than the starting point
             */
-            slope_ik = SLOPEB(i, k, zi, z[k]);
-
-            /*
-            * Compare each kth point against the maximum slope
-            * already found. If it's slope is greater than the previous
-            * horizon, then it's found a new horizon
-            */
-            if (slope_ik > max_slope)
+            if (z[k] > zi)
             {
-                max_slope = slope_ik;
-                max_point = k;
+                dist = (double)(i - k);
+                slope_ik = (z[k] - zi) / dist;
+
+                /*
+                * Compare each kth point against the maximum slope
+                * already found. If it's slope is greater than the previous
+                * horizon, then it's found a new horizon
+                */
+                if (slope_ik > max_slope)
+                {
+                    max_slope = slope_ik;
+                    max_point = k;
+                }
             }
         }
 
@@ -219,7 +222,7 @@ void horval(
     int *h,       /* horizon function */
     double *hcos) /* cosines of angles to horizon */
 {
-    int d;       /* difference in indices */
+    double d;    /* difference in indices */
     int i;       /* index of point */
     int j;       /* index of horizon point */
     double diff; /* elevation difference */
@@ -229,21 +232,21 @@ void horval(
 
         /* # grid points to horizon */
         j = h[i];
-        d = j - i;
+        d = (double)(j - i);
 
         /* point is its own horizon */
         if (d == 0)
         {
-            *hcos++ = 0;
+            hcos[i] = 0;
         }
 
-        /* else need to calculate sine */
+        /* else need to calculate cosine */
         else
         {
             if (d < 0)
                 d = -d;
             diff = z[j] - z[i];
-            *hcos++ = diff / (double)hypot(diff, d * delta);
+            hcos[i] = diff / (double)hypot(diff, d * delta);
         }
     }
 }
