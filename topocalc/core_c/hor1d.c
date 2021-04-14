@@ -30,7 +30,6 @@ void hor2d(
     double *zbuf;
     zbuf = (double *)calloc(ncols, sizeof(double));
 
-    printf("%f - %i\n", delta, ncols);
     /*
      * main loop, read in full line at a time
      */
@@ -98,7 +97,6 @@ int hor1f(
     {
         zi = z[i];
 
-        printf("i: %i; zi: %f; ", i, zi);
         /* assume the point is it's own horizon at first*/
         max_slope = 0.0;
         max_point = i;
@@ -120,7 +118,6 @@ int hor1f(
                 dist = (double)(k - i);
                 slope_ik = (z[k] - zi) / dist;
 
-                printf("k: %i - dist: %f - slope_ik: %f; ", k, dist, slope_ik);
                 /*
                 * Compare each kth point against the maximum slope
                 * already found. If it's slope is greater than the previous
@@ -134,7 +131,6 @@ int hor1f(
             }
         }
 
-        printf("\n\n");
         h[i] = max_point;
     }
     return (0);
