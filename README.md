@@ -1,7 +1,6 @@
 # topocalc
 
 [![Pypi version](https://img.shields.io/pypi/v/topocalc.svg)](https://pypi.python.org/pypi/topocalc)
-[![Build Status](https://travis-ci.com/USDA-ARS-NWRC/topocalc.svg?branch=main)](https://travis-ci.com/USDA-ARS-NWRC/topocalc)
 [![Coverage Status](https://coveralls.io/repos/github/USDA-ARS-NWRC/topocalc/badge.svg?branch=main)](https://coveralls.io/github/USDA-ARS-NWRC/topocalc?branch=main)
 [![Maintainability](https://api.codeclimate.com/v1/badges/20930fef2e7b7fe91dd3/maintainability)](https://codeclimate.com/github/USDA-ARS-NWRC/topocalc/maintainability)
 
