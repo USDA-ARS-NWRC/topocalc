@@ -51,8 +51,6 @@ ext_modules += [
                   "hor1d.c",
               ]],
               include_dirs=[numpy.get_include()],
-              #   extra_compile_args=['-Wall'],
-              #   extra_link_args=['-Wall'],
               ),
 ]
 
