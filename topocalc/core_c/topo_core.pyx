@@ -31,7 +31,8 @@ def c_hor1d(np.ndarray[double, mode="c", ndim=1] z,
            bint forward,
            np.ndarray[double, mode="c", ndim=1] hcos):
     """
-    Call the function hor1f in hor1f.c
+    Call the functions hor1f and hor1b in hor1d.c, then calculate the cosine of
+    the horizon angle using the function horval.
 
     https://stackoverflow.com/questions/23435756/passing-numpy-integer-array-to-c-code
 
@@ -92,4 +93,5 @@ def c_hor2d(np.ndarray[double, mode="c", ndim=2] z,
 
     # call the hor2d C function
     hor2d(nrows, ncols, &z_arr[0,0], cspacing, fwd, &hcos[0,0])
+
 
