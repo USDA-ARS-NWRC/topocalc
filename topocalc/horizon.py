@@ -1,50 +1,66 @@
 import numpy as np
+from numpy.matrixlib import defmatrix
+#from numba import jit
 
 from topocalc.core_c import topo_core
 from topocalc.skew import adjust_spacing, skew
 
 
-def skew_transpose(dem, spacing, angle):
+def skew_transpose(dem, dx, angle, dy=None):
     """Skew and transpose the dem for the given angle.
     Also calculate the new spacing given the skew.
 
     Arguments:
         dem {array} -- numpy array of dem elevations
-        spacing {float} -- grid spacing
+        dx {float} -- grid spacing in E-W direction
+        dy {float} -- grid spacing in N-S direction
         angle {float} -- skew angle
 
     Returns:
         t -- skew and transpose array
-        spacing -- new spacing adjusted for angle
+        dxp -- new horizontal spacing adjusted for angle
+        dyp -- new vertical spacing adjusted for angle
     """
 
-    spacing = adjust_spacing(spacing, np.abs(angle))
-    t = skew(dem, angle, fill_min=True).transpose()
+    if dy is None:
+        dy = dx
+
+    spacing = adjust_spacing(dy, np.abs(angle))
+    t = skew(dem, angle, dx=dx, dy=dy, fill_min=True).transpose()
 
     return t, spacing
 
 
-def transpose_skew(dem, spacing, angle):
+def transpose_skew(dem, dx, angle, dy=None):
     """Transpose, skew then transpose a dem for the
     given angle. Also calculate the new spacing
 
     Arguments:
         dem {array} -- numpy array of dem elevations
-        spacing {float} -- grid spacing
+        dx {float} -- grid spacing in E-W direction (columns)
+        dy {float} -- grid spacing in N-S direction (rows)
         angle {float} -- skew angle
 
     Returns:
         t -- skew and transpose array
-        spacing -- new spacing adjusted for angle
+        dxp -- new E-W spacing adjusted for angle
+        dyp -- new N-S spacing adjusted for angle
     """
 
-    t = skew(dem.transpose(), angle, fill_min=True).transpose()
-    spacing = adjust_spacing(spacing, np.abs(angle))
+    if dy is None:
+        dy = dx
+
+    # spacing adjustment is in x direction for transposed array
+    spacing = adjust_spacing(dx, np.abs(angle))
+    # taking skew of transpose - need to swap dx and dy
+    t = skew(dem.transpose(), angle, dx=dy, dy=dx, fill_min=True).transpose()
+    #dxp = adjust_spacing(dx, np.abs(angle))
+    #dyp = adjust_spacing(dy, np.abs(angle))
 
     return t, spacing
 
 
-def horizon(azimuth, dem, spacing):
+def horizon(azimuth, dem, dx, dy=None):
     """Calculate horizon angles for one direction. Horizon angles
     are based on Dozier and Frew 1990 and are adapted from the
     IPW C code.
@@ -57,7 +73,8 @@ def horizon(azimuth, dem, spacing):
     Arguments:
         azimuth {float} -- find horizon's along this direction
         dem {np.array2d} -- numpy array of dem elevations
-        spacing {float} -- grid spacing
+        dx {float} -- grid spacing in E-W direction
+        dy {float} -- grid spacing in N-S direction
 
     Returns:
         hcos {np.array} -- cosines of angles to the horizon
@@ -69,57 +86,82 @@ def horizon(azimuth, dem, spacing):
     if azimuth > 180 or azimuth < -180:
         raise ValueError('azimuth must be between -180 and 180 degrees')
 
+    if dy is None:
+        dy = dx
+
+    spacing = dx
+
     if azimuth == 90:
         # East
-        hcos = hor2d_c(dem, spacing, fwd=True)
+        hcos = hor2d_c(dem, dx, fwd=True)
 
     elif azimuth == -90:
         # West
-        hcos = hor2d_c(dem, spacing, fwd=False)
+        hcos = hor2d_c(dem, dx, fwd=False)
 
     elif azimuth == 0:
         # South
-        hcos = hor2d_c(dem.transpose(), spacing, fwd=True)
+        hcos = hor2d_c(dem.transpose(), dy, fwd=True)
         hcos = hcos.transpose()
 
     elif np.abs(azimuth) == 180:
-        # South
-        hcos = hor2d_c(dem.transpose(), spacing, fwd=False)
+        # North
+        hcos = hor2d_c(dem.transpose(), dy, fwd=False)
         hcos = hcos.transpose()
 
     elif azimuth >= -45 and azimuth <= 45:
         # South west through south east
-        t, spacing = skew_transpose(dem, spacing, azimuth)
+        t, spacing = skew_transpose(dem, dx, azimuth, dy=dy)
         h = hor2d_c(t, spacing, fwd=True)
-        hcos = skew(h.transpose(), azimuth, fwd=False)
+        #print('new grid spacing is ',dx,'by ',spacing)
+        #print(h.shape)
+        hcos = skew(h.transpose(), azimuth, dx=dx, dy=dy, fwd=False)
+        #print('after un-skew:')
+        #print(hcos.shape)
 
     elif azimuth <= -135 and azimuth > -180:
         # North west
         a = azimuth + 180
-        t, spacing = skew_transpose(dem, spacing, a)
+        t, spacing = skew_transpose(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        hcos = skew(h.transpose(), a, fwd=False)
+        #print('new grid spacing is ',dx,'by ',spacing)
+        #print(h.shape)
+        hcos = skew(h.transpose(), a, dx=dx, dy=dy, fwd=False)
+        #print('after un-skew:')
+        #print(hcos.shape)
 
     elif azimuth >= 135 and azimuth < 180:
         # North East
         a = azimuth - 180
-        t, spacing = skew_transpose(dem, spacing, a)
+        t, spacing = skew_transpose(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        hcos = skew(h.transpose(), a, fwd=False)
+        #print('new grid spacing is ',dx,'by ',spacing)
+        #print(h.shape)
+        hcos = skew(h.transpose(), a, dx=dx, dy=dy, fwd=False)
+        #print('after un-skew:')
+        #print(hcos.shape)
 
     elif azimuth > 45 and azimuth < 135:
         # South east through north east
         a = 90 - azimuth
-        t, spacing = transpose_skew(dem, spacing, a)
+        t, spacing = transpose_skew(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=True)
-        hcos = skew(h.transpose(), a, fwd=False).transpose()
+        #print('new grid spacing is ',spacing,'by ',dy)
+        #print(h.shape)
+        hcos = skew(h.transpose(), a, dx=dy, dy=dx, fwd=False).transpose()
+        #print('after un-skew:')
+        #print(hcos.shape)
 
     elif azimuth < -45 and azimuth > -135:
         # South west through north west
         a = -90 - azimuth
-        t, spacing = transpose_skew(dem, spacing, a)
+        t, spacing = transpose_skew(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        hcos = skew(h.transpose(), a, fwd=False).transpose()
+        #print('new grid spacing is ',spacing,'by ',dy)
+        #print(h.shape)
+        hcos = skew(h.transpose(), a, dx=dy, dy=dx, fwd=False).transpose()
+        #print('after un-skew:')
+        #print(hcos.shape)
 
     else:
         ValueError('azimuth not valid')
