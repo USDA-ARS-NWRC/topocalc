@@ -1,6 +1,4 @@
 import numpy as np
-from numba import jit
-
 
 def adjust_spacing(spacing, skew_angle):
     """Adjust the grid spacing if a skew angle is present
@@ -15,8 +13,26 @@ def adjust_spacing(spacing, skew_angle):
 
     return spacing / np.cos(skew_angle * np.arctan(1.) / 45)
 
+def custom_roll(arr, r_tup):
+    """Apply an independent roll for each row of an array.
 
-@jit(nopython=True,parallel=True,fastmath=True)
+    Taken from https://stackoverflow.com/a/60460462
+
+    Parameters
+    ----------
+    arr: np.ndarray
+        2d array
+    r_tup: np.ndarray
+        1d array of shifts for each row of the 2d array
+    """
+    m = np.asarray(r_tup)
+    arr_roll = arr[:, [*range(arr.shape[1]),*range(arr.shape[1]-1)]].copy() #need `copy`
+    strd_0, strd_1 = arr_roll.strides
+    n = arr.shape[1]
+    result = np.lib.stride_tricks.as_strided(arr_roll, (*arr.shape, n), (strd_0 ,strd_1, strd_1))
+
+    return result[np.arange(arr.shape[0]), (n-m)%n]
+
 def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
     """
     Skew the origin of successive lines by a specified angle
@@ -78,7 +94,24 @@ def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
     b = np.zeros((nlines, o_nsamps))
     if fill_min:
         b += np.min(arr)
+    
+    if fwd:
+        b[0:nlines,0:nsamps] = arr # if skewing, first fill output array with original array
 
+    o = np.arange(nlines)
+    if not negflag: # positive skew angle means shifts decrease with increasing row index
+        o = nlines - o - 1
+    offset = (o * slope + 0.5).astype(int)
+
+    if not fwd: # offset values are negative shifts if unskewing
+        offset *= -1
+
+    if fwd:
+        b = custom_roll(b,offset)
+    else:
+        b[:,:] = custom_roll(arr,offset)[:,:o_nsamps] # assignment indexing added to ensure array shape match
+
+    '''
     for line in range(nlines):
         o = line if negflag else nlines - line - 1
         offset = int(o * slope + 0.5)
@@ -87,5 +120,5 @@ def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
             b[line, offset:offset+nsamps] = arr[line, :]
         else:
             b[line, :] = arr[line, offset:offset+o_nsamps]
-
+    '''
     return b
