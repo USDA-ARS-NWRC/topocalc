@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.matrixlib import defmatrix
+#from numpy.matrixlib import defmatrix
 
 from topocalc.core_c import topo_core
 from topocalc.skew import adjust_spacing, skew
@@ -17,8 +17,7 @@ def skew_transpose(dem, dx, angle, dy=None):
 
     Returns:
         t -- skew and transpose array
-        dxp -- new horizontal spacing adjusted for angle
-        dyp -- new vertical spacing adjusted for angle
+        spacing -- new N-S spacing adjusted for azimuth angle
     """
 
     if dy is None:
@@ -42,8 +41,7 @@ def transpose_skew(dem, dx, angle, dy=None):
 
     Returns:
         t -- skew and transpose array
-        dxp -- new E-W spacing adjusted for angle
-        dyp -- new N-S spacing adjusted for angle
+        spacing -- new E-W spacing adjusted for azimuth angle
     """
 
     if dy is None:
@@ -53,8 +51,6 @@ def transpose_skew(dem, dx, angle, dy=None):
     spacing = adjust_spacing(dx, np.abs(angle))
     # taking skew of transpose - need to swap dx and dy
     t = skew(dem.transpose(), angle, dx=dy, dy=dx, fill_min=True).transpose()
-    #dxp = adjust_spacing(dx, np.abs(angle))
-    #dyp = adjust_spacing(dy, np.abs(angle))
 
     return t, spacing
 

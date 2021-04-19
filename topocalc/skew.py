@@ -29,15 +29,15 @@ def custom_roll(arr, r_tup):
     """
 
     m = np.asarray(r_tup)
-    arr_roll = arr[:, [*range(arr.shape[1]), 
-                       *range(arr.shape[1]-1)]].copy() #need `copy`
+    arr_roll = arr[:, [*range(arr.shape[1]),
+                       *range(arr.shape[1]-1)]].copy()  #need `copy`
     strd_0, strd_1 = arr_roll.strides
     n = arr.shape[1]
-    result = np.lib.stride_tricks.as_strided(arr_roll, 
-                                             (*arr.shape, n), 
+    result = np.lib.stride_tricks.as_strided(arr_roll,
+                                             (*arr.shape, n),
                                              (strd_0, strd_1, strd_1))
 
-    return result[np.arange(arr.shape[0]), (n-m)%n]
+    return result[np.arange(arr.shape[0]), (n - m) % n]
 
 
 def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
@@ -60,7 +60,8 @@ def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
     Arguments:
         arr: array to skew
         angle: angle between -45 and 45 to skew by
-        dx: spacing of the array in the x (sample) direction (if dx=dy, or dx or dy not supplied, spacing is ignored)
+        dx: spacing of the array in the x (sample) direction 
+            (if dx=dy, or dx or dy not supplied, spacing is ignored)
         dy: spacing of the array in the y (line) direction
         fwd: add skew to image if True, unskew image if False
         fill_min: While IPW skew says it fills with zeros, the output
@@ -102,7 +103,7 @@ def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
     b = np.zeros((nlines, o_nsamps))
     if fill_min:
         b += np.min(arr)
-    
+
     # if skewing, first fill output array with original array
     if fwd:
         b[0:nlines, 0:nsamps] = arr
