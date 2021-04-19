@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.matrixlib import defmatrix
-#from numba import jit
 
 from topocalc.core_c import topo_core
 from topocalc.skew import adjust_spacing, skew
@@ -113,55 +112,35 @@ def horizon(azimuth, dem, dx, dy=None):
         # South west through south east
         t, spacing = skew_transpose(dem, dx, azimuth, dy=dy)
         h = hor2d_c(t, spacing, fwd=True)
-        #print('new grid spacing is ',dx,'by ',spacing)
-        #print(h.shape)
         hcos = skew(h.transpose(), azimuth, dx=dx, dy=dy, fwd=False)
-        #print('after un-skew:')
-        #print(hcos.shape)
 
     elif azimuth <= -135 and azimuth > -180:
         # North west
         a = azimuth + 180
         t, spacing = skew_transpose(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        #print('new grid spacing is ',dx,'by ',spacing)
-        #print(h.shape)
         hcos = skew(h.transpose(), a, dx=dx, dy=dy, fwd=False)
-        #print('after un-skew:')
-        #print(hcos.shape)
 
     elif azimuth >= 135 and azimuth < 180:
         # North East
         a = azimuth - 180
         t, spacing = skew_transpose(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        #print('new grid spacing is ',dx,'by ',spacing)
-        #print(h.shape)
         hcos = skew(h.transpose(), a, dx=dx, dy=dy, fwd=False)
-        #print('after un-skew:')
-        #print(hcos.shape)
 
     elif azimuth > 45 and azimuth < 135:
         # South east through north east
         a = 90 - azimuth
         t, spacing = transpose_skew(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=True)
-        #print('new grid spacing is ',spacing,'by ',dy)
-        #print(h.shape)
         hcos = skew(h.transpose(), a, dx=dy, dy=dx, fwd=False).transpose()
-        #print('after un-skew:')
-        #print(hcos.shape)
 
     elif azimuth < -45 and azimuth > -135:
         # South west through north west
         a = -90 - azimuth
         t, spacing = transpose_skew(dem, dx, a, dy=dy)
         h = hor2d_c(t, spacing, fwd=False)
-        #print('new grid spacing is ',spacing,'by ',dy)
-        #print(h.shape)
         hcos = skew(h.transpose(), a, dx=dy, dy=dx, fwd=False).transpose()
-        #print('after un-skew:')
-        #print(hcos.shape)
 
     else:
         ValueError('azimuth not valid')
