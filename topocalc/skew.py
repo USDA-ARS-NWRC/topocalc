@@ -30,7 +30,7 @@ def custom_roll(arr, r_tup):
 
     m = np.asarray(r_tup)
     arr_roll = arr[:, [*range(arr.shape[1]),
-                       *range(arr.shape[1]-1)]].copy()  #need `copy`
+                       *range(arr.shape[1]-1)]].copy()  # need `copy`
     strd_0, strd_1 = arr_roll.strides
     n = arr.shape[1]
     result = np.lib.stride_tricks.as_strided(arr_roll,
@@ -60,7 +60,7 @@ def skew(arr, angle, dx=None, dy=None, fwd=True, fill_min=True):
     Arguments:
         arr: array to skew
         angle: angle between -45 and 45 to skew by
-        dx: spacing of the array in the x (sample) direction 
+        dx: spacing of the array in the x (sample) direction
             (if dx=dy, or dx or dy not supplied, spacing is ignored)
         dy: spacing of the array in the y (line) direction
         fwd: add skew to image if True, unskew image if False

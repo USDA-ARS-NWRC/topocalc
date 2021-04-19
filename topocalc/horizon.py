@@ -1,5 +1,5 @@
 import numpy as np
-#from numpy.matrixlib import defmatrix
+# from numpy.matrixlib import defmatrix
 
 from topocalc.core_c import topo_core
 from topocalc.skew import adjust_spacing, skew
