@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <omp.h>
 #include "topo_core.h"
 
 void hor2d(
@@ -74,12 +75,12 @@ int hor1f(
     double *z, /* elevation function */
     int *h)    /* horizon function (return) */
 {
+    int i;            /* current point index */
+    int k;            /* search point index */
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
     int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
-    int i;            /* current point index */
-    int k;            /* search point index */
     double dist;      /* difference between i and k */
 
     /*
@@ -93,6 +94,8 @@ int hor1f(
     * beginning.  For backward direction, loop runs from
     * next-to-beginning forward to end.
     */
+    #pragma omp private(slope_ik, max_slope, max_point, zi, dist)
+    #pragma omp parallel for schedule(static) private(k) shared(h, z)
     for (i = n - 2; i >= 0; --i)
     {
         zi = z[i];
@@ -145,12 +148,12 @@ int hor1b(
     double *z, /* elevation function */
     int *h)    /* horizon function (return) */
 {
+    int i;            /* current point index */
+    int k;            /* search point index */
     double slope_ik;  /* slope i to k */
     double max_slope; /* max slope value */
     int max_point;    /* point with max horizon */
     double zi;        /* z[i] */
-    int i;            /* current point index */
-    int k;            /* search point index */
     double dist;      /* difference between i and k */
 
     /*
@@ -164,6 +167,8 @@ int hor1b(
     * beginning.  For backward direction, loop runs from
     * next-to-beginning forward to end.
     */
+    #pragma omp private(slope_ik, max_slope, max_point, zi, dist)
+    #pragma omp parallel for schedule(static) private(k) shared(h, z)
     for (i = 1; i < n; ++i)
     {
         zi = z[i];
@@ -227,6 +232,7 @@ void horval(
     int j;       /* index of horizon point */
     double diff; /* elevation difference */
 
+    #pragma omp parallel for schedule(static) private(j, d, diff) shared(h, z, hcos)
     for (i = 0; i < n; ++i)
     {
 
