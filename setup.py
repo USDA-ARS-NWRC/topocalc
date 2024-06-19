@@ -37,6 +37,13 @@ test_requirements = []
 if "CC" not in os.environ:
     os.environ["CC"] = "gcc"
 
+# extension parameters
+extension_params = dict(
+    extra_compile_args=['-fopenmp'],
+    extra_link_args=['-fopenmp'],
+    include_dirs=[numpy.get_include()]
+)
+
 cmdclass = {'build_ext': build_ext}
 ext_modules = []
 
@@ -50,7 +57,7 @@ ext_modules += [
                   "topo_core.pyx",
                   "hor1d.c",
               ]],
-              include_dirs=[numpy.get_include()],
+              **extension_params,
               ),
 ]
 
