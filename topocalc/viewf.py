@@ -4,8 +4,7 @@ from topocalc.gradient import gradient_d8
 from topocalc.horizon import horizon
 
 
-def dozier_2022(angles, dem, spacing, aspect, 
-                cos_slope, sin_slope, tan_slope, svf):
+def dozier_2022(angles, dem, spacing, aspect, slope, svf):
     '''
     Sky view factor as calcualted in Dozier,2022
     
@@ -13,6 +12,10 @@ def dozier_2022(angles, dem, spacing, aspect,
     IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
     
     '''
+    # Compute trig
+    sin_slope = np.sin(slope)
+    cos_slope = np.cos(slope)
+    tan_slope = np.tan(slope)
 
     for angle in angles:
 
@@ -46,8 +49,7 @@ def dozier_2022(angles, dem, spacing, aspect,
     return svf, tcf
 
 
-def dozier_and_frew_1990(angles, dem, spacing, aspect, 
-                         cos_slope, sin_slope, svf):
+def dozier_and_frew_1990(angles, dem, spacing, aspect, slope, svf):
     '''
     Sky view factor as calcualted in Eq 7b Dozier & Frew, 1990:
 
@@ -58,6 +60,10 @@ def dozier_and_frew_1990(angles, dem, spacing, aspect,
 
     
     '''
+
+    # Compute trig
+    sin_slope = np.sin(slope)
+    cos_slope = np.cos(slope)
 
     # Loop through n_angles
     for angle in angles:
@@ -138,9 +144,6 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     if sin_slope is None:
         slope, aspect = gradient_d8(
             dem, dx=spacing, dy=spacing, aspect_rad=True)
-        sin_slope = np.sin(slope)
-        cos_slope = np.cos(slope)
-        tan_slope = np.tan(slope)
 
     # -180 is North
     angles = np.linspace(-180, 180, num=nangles, endpoint=False)
@@ -151,11 +154,11 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     # perform the integral based on which method
     if method == 'dozier_and_frew_1990':
         svf,tcf = dozier_and_frew_1990(angles, dem, spacing, 
-                                       aspect,cos_slope, sin_slope, svf)
+                                       aspect, slope, svf)
 
     elif method == 'dozier_2022':
         svf,tcf = dozier_2022(angles, dem, spacing, 
-                              aspect,cos_slope, sin_slope, tan_slope, svf)
+                              aspect, slope, svf)
 
     else:
         raise Exception("Unknown sky view factor method given")
