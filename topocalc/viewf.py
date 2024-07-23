@@ -3,6 +3,86 @@ import numpy as np
 from topocalc.gradient import gradient_d8
 from topocalc.horizon import horizon
 
+
+def dozier_2022(angles, dem, spacing, aspect, 
+                cos_slope, sin_slope, tan_slope, svf):
+    '''
+    Sky view factor as calcualted in Dozier,2022
+    
+    Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing. 
+    IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
+    
+    '''
+
+    for angle in angles:
+
+        # horizon angles
+        hcos = horizon(angle, dem, spacing)
+        azimuth = np.radians(angle)
+
+        # H
+        h = np.arccos(hcos)
+
+        # cosines of difference between Slope aspect and horizon azimuth
+        cos_aspect = np.cos(aspect - azimuth)
+
+        # check for slope being obscured
+        # EQ 3 in Dozier et al. 2022
+        #     H(t) = min(H(t), acos(sqrt(1-1./(1+tand(slopeDegrees)^2*cos(azmRadian(t)-aspectRadian).^2))));
+        t = cos_aspect<0
+        h[t] = np.fmin(h[t],np.arccos(np.sqrt(1 - 1/(1 + cos_aspect[t]**2 * tan_slope[t]**2))))
+
+        # integral in Dozier 2022
+        # qIntegrand = (cosd(slopeDegrees)*sin(H).^2 + sind(slopeDegrees)*cos(aspectRadian-azmRadian).*(H-cos(H).*sin(H)))/2
+        intgrnd = (cos_slope * np.sin(h)**2 + sin_slope*cos_aspect * (h - np.sin(h)*np.cos(h)))
+
+        ind = intgrnd > 0
+        svf[ind] = svf[ind] + intgrnd[ind]
+
+    # Compute final arrays
+    svf = svf / len(angles)
+    tcf = (1 + cos_slope)/2 - svf
+
+    return svf, tcf
+
+
+def dozier_and_frew_1990(angles, dem, spacing, aspect, 
+                         cos_slope, sin_slope, svf):
+    '''
+    Sky view factor as calcualted in Dozier & Frew, 1990.
+    
+    '''
+
+    # Loop through n_angles
+    for angle in angles:
+
+        # horizon angles
+        hcos = horizon(angle, dem, spacing)
+        azimuth = np.radians(angle)
+
+        # sin^2(H)
+        sin_squared = (1 - hcos) * (1 + hcos)
+
+        # H - sin(H)cos(H)
+        h_mult = np.arccos(hcos) - np.sqrt(sin_squared) * hcos
+
+        # cosines of difference between horizon aspect and slope aspect
+        cos_aspect = np.cos(azimuth - aspect)
+
+        # integral in equation 7b
+        intgrnd = cos_slope * sin_squared + sin_slope * cos_aspect * h_mult
+
+        ind = intgrnd > 0
+        svf[ind] = svf[ind] + intgrnd[ind]
+
+    # Compute final arrays
+    svf = svf / len(angles)
+    tcf = (1 + cos_slope)/2 - svf
+
+    return svf, tcf
+
+
+
 def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect=None):
     """
     Calculate the sky view factor of a dem, as written in Dozier,2022,
@@ -62,60 +142,16 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     # Create zeros like array similar to DEM
     svf = np.zeros_like(sin_slope)
 
-    # perform the integral
-    # If 1990 is in the method, use Dozier Frew 1990 method.
-    if '90' in method:
-        for angle in angles:
+    # perform the integral based on which method
+    if method == 'dozier_and_frew_1990':
+        svf,tcf = dozier_and_frew_1990(angles, dem, spacing, 
+                                       aspect,cos_slope, sin_slope, svf)
 
-            # horizon angles
-            hcos = horizon(angle, dem, spacing)
-            azimuth = np.radians(angle)
+    elif method == 'dozier_2022':
+        svf,tcf = dozier_2022(angles, dem, spacing, 
+                              aspect,cos_slope, sin_slope, tan_slope, svf)
 
-            # sin^2(H)
-            sin_squared = (1 - hcos) * (1 + hcos)
-
-            # H - sin(H)cos(H)
-            h_mult = np.arccos(hcos) - np.sqrt(sin_squared) * hcos
-
-            # cosines of difference between horizon aspect and slope aspect
-            cos_aspect = np.cos(azimuth - aspect)
-
-            # integral in equation 7b
-            intgrnd = cos_slope * sin_squared + sin_slope * cos_aspect * h_mult
-
-            ind = intgrnd > 0
-            svf[ind] = svf[ind] + intgrnd[ind]
-
-
-    else: # use the updated 2022 method (Default)
-        for angle in angles:
-
-            # horizon angles
-            hcos = horizon(angle, dem, spacing)
-            azimuth = np.radians(angle)
-
-            # H
-            h = np.arccos(hcos)
-
-            # cosines of difference between Slope aspect and horizon azimuth
-            cos_aspect = np.cos(aspect - azimuth)
-
-            # check for slope being obscured
-            # EQ 3 in Dozier et al. 2022
-            #     H(t) = min(H(t), acos(sqrt(1-1./(1+tand(slopeDegrees)^2*cos(azmRadian(t)-aspectRadian).^2))));
-            t = cos_aspect<0
-            h[t] = np.fmin(h[t],np.arccos(np.sqrt(1 - 1/(1 + cos_aspect[t]**2 * tan_slope[t]**2))))
-
-            # integral in Dozier 2022
-            # qIntegrand = (cosd(slopeDegrees)*sin(H).^2 + sind(slopeDegrees)*cos(aspectRadian-azmRadian).*(H-cos(H).*sin(H)))/2
-            intgrnd = (cos_slope * np.sin(h)**2 + sin_slope*cos_aspect * (h - np.sin(h)*np.cos(h)))
-
-            ind = intgrnd > 0
-            svf[ind] = svf[ind] + intgrnd[ind]
-    
-
-    # Compute final arrays
-    svf = svf / len(angles)
-    tcf = (1 + cos_slope)/2 - svf
+    else:
+        raise Exception("Unknown sky view factor method given")
 
     return svf, tcf
