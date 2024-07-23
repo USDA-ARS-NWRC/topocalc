@@ -49,7 +49,13 @@ def dozier_2022(angles, dem, spacing, aspect,
 def dozier_and_frew_1990(angles, dem, spacing, aspect, 
                          cos_slope, sin_slope, svf):
     '''
-    Sky view factor as calcualted in Dozier & Frew, 1990.
+    Sky view factor as calcualted in Eq 7b Dozier & Frew, 1990:
+
+    .. math::
+        V_d \approx \frac{1}{2\pi} \int_{0}^{2\pi}\left [ cos(S) sin^2{H_\phi} 
+        + sin(S)cos(\phi-A) \times \left ( H_\phi - sin(H_\phi) cos(H_\phi)
+        \right )\right ] d\phi
+
     
     '''
 
@@ -91,7 +97,7 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
 
 
-    Alternatively, it can be ran using equation 7b from Dozier and Frew 1990
+    Alternatively, it can be ran using equation 7b from Dozier and Frew 1990.
 
 
     terrain configuration factor (tvf) is defined as:
