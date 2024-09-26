@@ -1,6 +1,6 @@
 import numpy as np
 
-from topocalc.gradient import gradient_d8
+from topocalc.gradient import gradient
 from topocalc.horizon import horizon
 
 
@@ -95,27 +95,28 @@ def dozier_and_frew_1990(angles, dem, spacing, aspect, slope, svf):
 
 
 
-def viewf(dem, spacing, nangles=72, method='dozier_2022'):
+def viewf(dem, spacing, nangles=72, method='dozier_2022', gradient_method="d8"):
     """
     Calculate the sky view factor of a dem, as written in Dozier,2022,
 
     Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing.
     IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
 
-
     Alternatively, it can be ran using equation 7b from Dozier and Frew 1990.
-
 
     terrain configuration factor (tvf) is defined as:
         (1 + cos(slope))/2 - sky view factor
 
-
     Args:
+        gradient:
         dem: numpy array for the DEM
         spacing: grid spacing of the DEM
         nangles: number of angles to estimate the horizon, defaults
                 to 72 angles
         method: Either 'dozier_2022' or 'dozier_and_frew_1990'
+        gradient_method: Method to calculate terrain gradient.
+                         Choices: "d4" or "d8" (Default).
+
 
     Returns:
         svf: sky view factor
@@ -129,8 +130,9 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022'):
     if nangles < 16:
         raise ValueError('viewf number of angles should be 16 or greater')
 
-    slope, aspect = gradient_d8(
-        dem, dx=spacing, dy=spacing, aspect_rad=True)
+    slope, aspect = gradient(
+        gradient_method, dem, dx=spacing, dy=spacing, aspect_rad=True
+    )
 
     # -180 is North
     angles = np.linspace(-180, 180, num=nangles, endpoint=False)

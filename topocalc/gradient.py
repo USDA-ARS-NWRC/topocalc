@@ -1,5 +1,22 @@
 import numpy as np
 
+def gradient(method, dem, dx, dy, aspect_rad=False):
+    """
+    Entry point to dynamically select the preferred gradient method.
+
+    Args:
+        method: Eihter "d4" or "d8".
+        dem: array of elevation values
+        dx: cell size along the x axis
+        dy: cell size along the y axis
+        aspect_rad: turn the aspect from degrees to IPW radians
+    """
+    if method == "d4":
+        return gradient_d4(dem, dx, dy, aspect_rad)
+    elif method == "d8":
+        return gradient_d8(dem, dx, dy, aspect_rad)
+    else:
+        raise ValueError("Unknown gradient method given")
 
 def gradient_d4(dem, dx, dy, aspect_rad=False):
     """Calculate the slope and aspect for provided dem,
