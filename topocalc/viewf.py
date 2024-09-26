@@ -95,7 +95,7 @@ def dozier_and_frew_1990(angles, dem, spacing, aspect, slope, svf):
 
 
 
-def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect=None):
+def viewf(dem, spacing, nangles=72, method='dozier_2022'):
     """
     Calculate the sky view factor of a dem, as written in Dozier,2022,
 
@@ -116,12 +116,6 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
         nangles: number of angles to estimate the horizon, defaults
                 to 72 angles
         method: Either 'dozier_2022' or 'dozier_and_frew_1990'
-        sin_slope: optional, will calculate if not provided
-                    sin(slope) with range from 0 to 1
-        aspect: optional, will calculate if not provided
-                Aspect as radians from south (aspect 0 is toward
-                the south) with range from -pi to pi, with negative
-                values to the west and positive values to the east.
 
     Returns:
         svf: sky view factor
@@ -135,21 +129,14 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     if nangles < 16:
         raise ValueError('viewf number of angles should be 16 or greater')
 
-    if sin_slope is not None:
-        if np.max(sin_slope) > 1:
-            raise ValueError('slope must be sin(slope) with range from 0 to 1')
-
-    # calculate the gradient if not provided
-    # The slope is returned as radians so convert to sin(S)
-    if sin_slope is None:
-        slope, aspect = gradient_d8(
-            dem, dx=spacing, dy=spacing, aspect_rad=True)
+    slope, aspect = gradient_d8(
+        dem, dx=spacing, dy=spacing, aspect_rad=True)
 
     # -180 is North
     angles = np.linspace(-180, 180, num=nangles, endpoint=False)
 
     # Create zeros like array similar to DEM
-    svf = np.zeros_like(sin_slope)
+    svf = np.zeros_like(dem)
 
     # perform the integral based on which method
     if method == 'dozier_and_frew_1990':

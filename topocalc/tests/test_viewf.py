@@ -59,9 +59,3 @@ class TestViewf(unittest.TestCase):
 
         self.assertRaises(ValueError, viewf, np.ones(
             (10, 1)), 10, nangles=10)
-
-    def test_viewf_errors_sin_slope(self):
-        """Test viewf sin_slope errors"""
-
-        self.assertRaises(ValueError, viewf, np.ones(
-            (10, 1)), 10, sin_slope=10*np.ones((10, 1)))
