@@ -59,3 +59,10 @@ class TestViewf(unittest.TestCase):
 
         self.assertRaises(ValueError, viewf, np.ones(
             (10, 1)), 10, nangles=10)
+
+    def test_viewf_unsupported_method(self):
+        """Test viewf unknown method """
+
+        self.assertRaises(Exception, viewf, np.ones(
+            (10, 1)), 10, nangles=72, method='custom_method'
+        )
