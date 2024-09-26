@@ -7,10 +7,10 @@ from topocalc.horizon import horizon
 def dozier_2022(angles, dem, spacing, aspect, slope, svf):
     '''
     Sky view factor as calcualted in Dozier,2022
-    
-    Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing. 
+
+    Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing.
     IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
-    
+
     '''
     # Compute trig
     sin_slope = np.sin(slope)
@@ -54,11 +54,11 @@ def dozier_and_frew_1990(angles, dem, spacing, aspect, slope, svf):
     Sky view factor as calcualted in Eq 7b Dozier & Frew, 1990:
 
     .. math::
-        V_d \approx \frac{1}{2\pi} \int_{0}^{2\pi}\left [ cos(S) sin^2{H_\phi} 
+        V_d \approx \frac{1}{2\pi} \int_{0}^{2\pi}\left [ cos(S) sin^2{H_\phi}
         + sin(S)cos(\phi-A) \times \left ( H_\phi - sin(H_\phi) cos(H_\phi)
         \right )\right ] d\phi
 
-    
+
     '''
 
     # Compute trig
@@ -99,7 +99,7 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
     """
     Calculate the sky view factor of a dem, as written in Dozier,2022,
 
-    Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing. 
+    Dozier, J. (2022). Revisiting topographic horizons in the era of big data and parallel Computing.
     IEEE Geoscience and Remote Sensing Letters, 19, 1-5.
 
 
@@ -134,7 +134,7 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
 
     if nangles < 16:
         raise ValueError('viewf number of angles should be 16 or greater')
-    
+
     if sin_slope is not None:
         if np.max(sin_slope) > 1:
             raise ValueError('slope must be sin(slope) with range from 0 to 1')
@@ -153,13 +153,11 @@ def viewf(dem, spacing, nangles=72, method='dozier_2022', sin_slope=None, aspect
 
     # perform the integral based on which method
     if method == 'dozier_and_frew_1990':
-        svf,tcf = dozier_and_frew_1990(angles, dem, spacing, 
-                                       aspect, slope, svf)
-
+        svf,tcf = dozier_and_frew_1990(
+            angles, dem, spacing, aspect, slope, svf
+        )
     elif method == 'dozier_2022':
-        svf,tcf = dozier_2022(angles, dem, spacing, 
-                              aspect, slope, svf)
-
+        svf,tcf = dozier_2022(angles, dem, spacing, aspect, slope, svf)
     else:
         raise Exception("Unknown sky view factor method given")
 
